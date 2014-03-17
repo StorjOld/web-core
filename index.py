@@ -5,7 +5,6 @@
 # Available routes:
 #
 #   GET  /download/filehash
-#   GET  /upload
 #   POST /upload
 #   GET  /server-usage
 #   GET  /disk-usage
@@ -53,22 +52,8 @@ def close_connection(exception):
     get_cloud_manager().close()
 
 
-#index page get request
-@app.route("/")
-def index():
-    """Show homepage."""
 
-    return render_template('index.html')
-
-
-#Upload get and post method to save files into directory
-@app.route("/upload",methods=['GET'])
-def upload_form():
-    """Show an upload form."""
-
-    return render_template('upload.html')
-
-
+#Upload post method to save files into directory
 @app.route("/upload",methods=['POST'])
 def upload():
     """Upload a file using cloud manager.
