@@ -34,17 +34,15 @@ def get_cloud_manager():
 
     return cloud_manager
 
+def get_coin():
+    coin = getattr(g, '_coin', None)
+    if coin is None:
+        coin = g._coin = metachains_dtc.Datacoin(
+                settings.DATACOIN_URL,
+                settings.DATACOIN_USERNAME,
+                settings.DATACOIN_PASSWORD)
 
-def human_size(bytes):
-    """Humanize a byte amount, by appending a unit suffix."""
-
-    units = ["Bytes", "KiB", "MiB", "GiB"]
-
-    while bytes > 2048 and len(units) > 1:
-        units.pop(0)
-        bytes = bytes/1024
-
-    return "{0} {1}".format(bytes, units[0])
+    return coin
 
 
 @app.teardown_appcontext
@@ -52,9 +50,8 @@ def close_connection(exception):
     get_cloud_manager().close()
 
 
-
 #Upload post method to save files into directory
-@app.route("/upload",methods=['POST'])
+@app.route("/api/upload",methods=['POST'])
 def upload():
     """Upload a file using cloud manager.
 
@@ -73,14 +70,14 @@ def upload():
         result = get_cloud_manager().upload(temp_name)
 
         if not result:
-            return 'Upload Failed', 500
+            return jsonify(error='Upload Failed'), 500
         else:
             return result, 201
     finally:
         os.remove(temp_name)
 
 
-@app.route("/download/<filehash>",methods=['GET'])
+@app.route("/api/download/<filehash>",methods=['GET'])
 def download(filehash):
     """Download a file from cloud manager.
 
@@ -94,27 +91,61 @@ def download(filehash):
 
     full_path = cm.warm_up(filehash)
     if full_path is None:
-        return 'File not found', 404
+        return jsonify(error='File not found'), 404
 
     return send_file(full_path,
             attachment_filename=os.path.basename(full_path),
             as_attachment=True)
 
 
-@app.route("/server-usage",methods=['GET'])
-def server_usage():
-    """Return total bytes downloaded.
+@app.route("/api/find/<filehash>", methods=['GET'])
+def find(filehash):
+    cm = get_cloud_manager()
 
-    Returns the number of bytes that were downloaded
+    info = cm.info(filehash)
+
+    if info is None:
+        return jsonify(error='File not found'), 404
+
+    return info
+
+
+@app.route("/api/bandwidth/in",methods=['GET'])
+def inbound_bandwidth():
+    """Return total bytes transferred to this node.
+
+    Returns the number of bytes that were tranferred
+    to this server.
+
+    """
+    cm = get_cloud_manager()
+
+    return jsonify(downloaded=cm.downloaded())
+
+
+@app.route("/api/bandwidth/out",methods=['GET'])
+def outbound_bandwidth():
+    """Return total bytes uploaded.
+
+    Returns the number of bytes that were uploaded
     from this server.
 
     """
     cm = get_cloud_manager()
 
-    return jsonify(bandwidthusage=human_size(cm.downloaded()))
+    return jsonify(downloaded=cm.uploaded())
 
 
-@app.route("/disk-usage",methods=['GET'])
+@app.route("/api/bandwidth/limits", methods=['GET'])
+def bandwidth_limits():
+    """Return the bandwidth limits for this server."""
+
+    cm = get_cloud_manager()
+
+    return jsonify(inbound=cm.download_limit(), outbound=cm.upload_limit())
+
+
+@app.route("/api/storage/usage", methods=['GET'])
 def disk_usage():
     """Return cloud manager disk usage.
 
@@ -124,8 +155,30 @@ def disk_usage():
     """
     cm = get_cloud_manager()
 
-    return jsonify(diskusage(human_size(cm.used_space())))
+    return jsonify(diskusage=cm.used_space())
 
+@app.route("/api/storage/capacity", methods=['GET'])
+def storage_capacity():
+    """Return cloud manager disk capacity.
+
+    """
+    cm = get_cloud_manager()
+
+    return jsonify(capacity=cm.capacity())
+
+
+@app.route("/api/dtc/balance", methods=['GET'])
+def coin_balance():
+    coin = get_coin()
+
+    return jsonify(balance=coin.balance())
+
+
+@app.route("/api/dtc/address", methods=['GET'])
+def coin_address():
+    coin = get_coin()
+
+    return jsonify(address=coin.address("incoming"))
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
