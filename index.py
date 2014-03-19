@@ -16,10 +16,23 @@ from werkzeug import secure_filename
 
 import settings
 import cloudmanager
+import metachains_dtc
 
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
 app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
+
+def make_cloudmanager():
+    return cloudmanager.CloudManager(
+        settings.DATABASE,
+        settings.STORAGE_PATH,
+        settings.STORAGE_SIZE)
+
+def make_coin():
+    return metachains_dtc.Datacoin(
+        settings.DATACOIN_URL,
+        settings.DATACOIN_USERNAME,
+        settings.DATACOIN_PASSWORD)
 
 
 def get_cloud_manager():
@@ -27,20 +40,14 @@ def get_cloud_manager():
 
     cloud_manager = getattr(g, '_cloud_manager', None)
     if cloud_manager is None:
-        cloud_manager = g._cloud_manager = cloudmanager.CloudManager(
-                settings.DATABASE,
-                settings.STORAGE_PATH,
-                settings.STORAGE_SIZE)
+        cloud_manager = g._cloud_manager = make_cloudmanager()
 
     return cloud_manager
 
 def get_coin():
     coin = getattr(g, '_coin', None)
     if coin is None:
-        coin = g._coin = metachains_dtc.Datacoin(
-                settings.DATACOIN_URL,
-                settings.DATACOIN_USERNAME,
-                settings.DATACOIN_PASSWORD)
+        coin = g._coin = make_coin()
 
     return coin
 
@@ -60,14 +67,13 @@ def upload():
 
     """
     # Save the uploaded file into a temporary location.
-    token       = request.form['request_id']
     file        = request.files['file']
     filename    = secure_filename(file.filename)
     temp_name   = os.path.join(app.config['TEMP_FOLDER'], filename)
     file.save(temp_name)
 
     try:
-        result = get_cloud_manager().upload(temp_name, token)
+        result = get_cloud_manager().upload(temp_name)
 
         if not result:
             return jsonify(error='Upload Failed'), 500
@@ -108,18 +114,6 @@ def find(filehash):
         return jsonify(error='File not found'), 404
 
     return jsonify(info)
-
-
-@app.route("/api/findhash/<token>", methods=['GET'])
-def find_hash(token):
-    cm = get_cloud_manager()
-
-    key = cm.key_by_token(token)
-
-    if key is None:
-        return jsonify(error='File not found'), 404
-
-    return jsonify(filehash=key)
 
 
 @app.route("/api/bandwidth/in",methods=['GET'])
