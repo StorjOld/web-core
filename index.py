@@ -59,15 +59,15 @@ def upload():
     file to three different host providers (in parallel).
 
     """
-
     # Save the uploaded file into a temporary location.
+    token       = request.form['request_id']
     file        = request.files['file']
     filename    = secure_filename(file.filename)
     temp_name   = os.path.join(app.config['TEMP_FOLDER'], filename)
     file.save(temp_name)
 
     try:
-        result = get_cloud_manager().upload(temp_name)
+        result = get_cloud_manager().upload(temp_name, token)
 
         if not result:
             return jsonify(error='Upload Failed'), 500
@@ -107,7 +107,19 @@ def find(filehash):
     if info is None:
         return jsonify(error='File not found'), 404
 
-    return info
+    return jsonify(info)
+
+
+@app.route("/api/findhash/<token>", methods=['GET'])
+def find_hash(token):
+    cm = get_cloud_manager()
+
+    key = cm.key_by_token(token)
+
+    if key is None:
+        return jsonify(error='File not found'), 404
+
+    return jsonify(filehash=key)
 
 
 @app.route("/api/bandwidth/in",methods=['GET'])
