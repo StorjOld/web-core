@@ -12,6 +12,9 @@ DATACOIN_USERNAME = "datacoinrpc"
 DATACOIN_PASSWORD = "secretish-password"
 DATACOIN_START    = 220000
 
+# cloud synchronization daemon settings
+CLOUDSYNC_WAIT    = 30 # in seconds
+
 try:
     from local_settings import *
 except ImportError:
