@@ -172,6 +172,15 @@ def storage_capacity():
 
     return jsonify(capacity=cm.capacity())
 
+@app.route("/api/status/sync", methods=['GET'])
+def status_sync():
+    """Return cloud manager synchronization status.
+
+    """
+    cm = get_cloud_manager()
+
+    return jsonify(cm.sync_status())
+
 
 @app.route("/api/dtc/balance", methods=['GET'])
 def coin_balance():
