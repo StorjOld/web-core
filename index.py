@@ -72,7 +72,7 @@ def upload():
         if not result:
             return jsonify(error='Upload Failed'), 500
         else:
-            return result, 201
+            return jsonify(filehash=result), 201
     finally:
         os.remove(temp_name)
 
