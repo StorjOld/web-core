@@ -99,22 +99,16 @@ Retrieve information regarding a given file hash:
     }
 
 
-Retrieve incoming transfer byte count:
+Retrieve incoming transfer byte count, for the current month and for all time:
 
-    GET /api/bandwidth/in
+    GET /api/bandwidth/usage
     Parameters: None
 
     Normal result:
-    { "incoming": 192746 }
-
-
-Retrieve outgoing transfer byte count:
-
-    GET /api/bandwidth/out
-    Parameters: None
-
-    Normal result:
-    { "outgoing": 547291 }
+    {
+      "current": { "incoming": 192746, "outgoing": 547291 },
+      "total":   { "incoming": 792431, "outgoing": 953218 }
+    }
 
 
 Retrieve monthly transfer limits, in bytes:
