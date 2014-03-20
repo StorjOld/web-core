@@ -126,7 +126,7 @@ def inbound_bandwidth():
     """
     cm = get_cloud_manager()
 
-    return jsonify(downloaded=cm.downloaded())
+    return jsonify(incoming=cm.downloaded())
 
 
 @app.route("/api/bandwidth/out",methods=['GET'])
@@ -139,7 +139,7 @@ def outbound_bandwidth():
     """
     cm = get_cloud_manager()
 
-    return jsonify(downloaded=cm.uploaded())
+    return jsonify(outgoing=cm.uploaded())
 
 
 @app.route("/api/bandwidth/limits", methods=['GET'])
@@ -148,7 +148,7 @@ def bandwidth_limits():
 
     cm = get_cloud_manager()
 
-    return jsonify(inbound=cm.download_limit(), outbound=cm.upload_limit())
+    return jsonify(incoming=cm.download_limit(), outgoing=cm.upload_limit())
 
 
 @app.route("/api/storage/usage", methods=['GET'])
@@ -161,7 +161,7 @@ def disk_usage():
     """
     cm = get_cloud_manager()
 
-    return jsonify(diskusage=cm.used_space())
+    return jsonify(usage=cm.used_space())
 
 @app.route("/api/storage/capacity", methods=['GET'])
 def storage_capacity():
@@ -172,7 +172,7 @@ def storage_capacity():
 
     return jsonify(capacity=cm.capacity())
 
-@app.route("/api/status/sync", methods=['GET'])
+@app.route("/api/sync/status", methods=['GET'])
 def status_sync():
     """Return cloud manager synchronization status.
 
