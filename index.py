@@ -116,31 +116,6 @@ def find(filehash):
     return jsonify(info)
 
 
-@app.route("/api/bandwidth/in",methods=['GET'])
-def inbound_bandwidth():
-    """Return total bytes transferred to this node.
-
-    Returns the number of bytes that were tranferred
-    to this server.
-
-    """
-    cm = get_cloud_manager()
-
-    return jsonify(incoming=cm.downloaded())
-
-
-@app.route("/api/bandwidth/out",methods=['GET'])
-def outbound_bandwidth():
-    """Return total bytes uploaded.
-
-    Returns the number of bytes that were uploaded
-    from this server.
-
-    """
-    cm = get_cloud_manager()
-
-    return jsonify(outgoing=cm.uploaded())
-
 @app.route("/api/bandwidth/usage", methods=['GET'])
 def bandwidth_usage():
     """Return bandwidth usage statistics."""
@@ -149,14 +124,15 @@ def bandwidth_usage():
 
     return jsonify({
         "total": {
-            "incoming": cm.total_downloaded(),
-            "outgoing": cm.total_uploaded()
+            "incoming": cm.total_incoming(),
+            "outgoing": cm.total_outgoing()
             },
         "current": {
-            "incoming": cm.current_downloaded(),
-            "outgoing": cm.current_uploaded()
+            "incoming": cm.current_incoming(),
+            "outgoing": cm.current_outgoing()
             }
         })
+
 
 @app.route("/api/bandwidth/limits", methods=['GET'])
 def bandwidth_limits():
@@ -164,7 +140,7 @@ def bandwidth_limits():
 
     cm = get_cloud_manager()
 
-    return jsonify(incoming=cm.download_limit(), outgoing=cm.upload_limit())
+    return jsonify(incoming=cm.incoming_limit(), outgoing=cm.outgoing_limit())
 
 
 @app.route("/api/storage/usage", methods=['GET'])
