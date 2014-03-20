@@ -1,14 +1,21 @@
-BitCumulus
+web-core
 ========
 
-BitCumulus, a filehost web app, that allows anyone to upload files via a web
-interface or API. Files are hashed and uploaded to public file hosting. Using
-the hashes a node can look up the information of where that file was stored
-using the [Datacoin](http://datacoin.info/) blockchain. This makes a file
-uploaded to BitCumulus accessible through any node in the network.
+web-core, a filehost web app, that allows anyone to upload files via a API.
+Files are hashed and uploaded to public file hosting. Using the hashes a node
+can look up the information of where that file was stored using the
+[Datacoin](http://datacoin.info/) blockchain. This makes a file uploaded to
+BitCumulus accessible through any node in the network.
 
 - Coded in [Python](http://python.org/) and [Flask](http://flask.pocoo.org/), a Python microframework for web.
 - Must be run on a Linux based web server, [Debian](http://www.debian.org/) distro recommended.
+
+#### Web interface
+
+If you wish to use this in a browser, take a look at
+[BitCumulus](https://github.com/Storj/BitCumulus). It is a web interface,
+composed of only html, css and javascript, powered by the web-core API.
+
 
 #### Scope
 
@@ -26,10 +33,10 @@ This project depends on several other projects:
   the Datacoin client, using json RPC. It also contains a synchronization class,
   which allows one to synchronize data from and to the blockchain.
 
-BitCumulus, this project, puts everything together and makes it accessible
-through a web application. It uses `cloudmanager` to manage all
-uploads/downloads, and `metachains-dtc` to enable synchronization of the hosted
-content information between nodes running BitCumulus.
+This project puts everything together and makes it accessible through a web
+application. It uses `cloudmanager` to manage all uploads/downloads, and
+`metachains-dtc` to enable synchronization of the hosted content information
+between nodes running BitCumulus.
 
 
 #### Installation

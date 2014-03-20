@@ -33,8 +33,29 @@ To test the installation, use the following command:
 
     python index.py
 
-BitCumulus will be running on http://localhost:5000
-You can use `gunicorn` to run multiple workers.
+BitCumulus will be running on http://localhost:5000. You can use `gunicorn` to
+run multiple workers. Check the
+[BitCumulus](https://github.com/Storj/BitCumulus) project if you wish to use
+this with a web browser interface.
+
+
+#### Cloud hosting synchronization setup
+
+To enable cloud hosting synchronization, you must configure an extra daemon.
+This daemon periodically checks if any new files were uploaded, and sends them
+to multiple cloud hosting websites.
+
+The daemon makes use of the same settings as the web server, so you only need
+to configure it once. There is only one additional parameter that you may
+configure. By default, the script checks the database every 30 seconds,
+but you can override this in `local_settings.py`:
+
+    CLOUDSYNC_WAIT = 10 # Polling period, in seconds.
+
+Using upstart, supervisord, or some other tool of your choice, set up a daemon
+that runs the
+[cloudsync.py](https://github.com/Storj/web-core/blob/master/cloudsync.py)
+script.
 
 
 #### Blockchain synchronization setup
@@ -69,5 +90,3 @@ intervals. Use crontab -e and add something similar to the following lines:
     0    */1 * * * /path/to/BitCumulus/.env/bin/python worker.py upload
 
 This will execute `download` every ten minutes, and `upload` every hour.
-
-
