@@ -141,6 +141,22 @@ def outbound_bandwidth():
 
     return jsonify(outgoing=cm.uploaded())
 
+@app.route("/api/bandwidth/usage", methods=['GET'])
+def bandwidth_usage():
+    """Return bandwidth usage statistics."""
+
+    cm = get_cloud_manager()
+
+    return jsonify({
+        "total": {
+            "incoming": cm.total_downloaded(),
+            "outgoing": cm.total_uploaded()
+            },
+        "current": {
+            "incoming": cm.current_downloaded(),
+            "outgoing": cm.current_uploaded()
+            }
+        })
 
 @app.route("/api/bandwidth/limits", methods=['GET'])
 def bandwidth_limits():
