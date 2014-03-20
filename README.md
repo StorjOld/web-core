@@ -52,15 +52,150 @@ Check [INSTALL.md](INSTALL.md) for installation instructions.
 
 ## API documentation
 
+Upload a file to the cloud manager:
+
     POST /api/upload
     Parameters:
     - file
 
-Upload a file to the cloud manager.
 
+Download a file from the cloud manager identified by the given file hash:
 
     GET /api/download/<filehash>
     Parameters:
     - filehash
 
-Downloads a file from the cloud manager identified by the given file hash.
+
+Retrieve information regarding a given file hash:
+
+    GET /api/find/<filehash>
+    Parameters:
+    - filehash
+
+    Error results:
+    { "error": "File not found" }
+
+    Normal Result:
+    {
+      "datetime": "1395268813",
+      "filehash": "cda2bb0f57d172b4901ee71f64f067335023c30e9eea2b7bc9d02ced942b3a29",
+      "filename": "cda2bb0_zenziC_-_Biomechanical.mp3",
+      "filesize": 3546893,
+      "uploads": [
+        {
+          "host_name": "multiupload",
+          "url": "http://multiupload.nl/K69M8BRFYR"
+        },
+        {
+          "host_name": "euroshare_eu",
+          "url": "http://euroshare.eu/file/15828724/cda2bb0-zenzic-biomechanical.mp3"
+        },
+        {
+          "error": true,
+          "host_name": "zalil_ru"
+        }
+      ],
+      "version": "0.2"
+    }
+
+
+Retrieve incoming transfer byte count:
+
+    GET /api/bandwidth/in
+    Parameters: None
+
+    Normal result:
+    { "incoming": 192746 }
+
+
+Retrieve outgoing transfer byte count:
+
+    GET /api/bandwidth/out
+    Parameters: None
+
+    Normal result:
+    { "outgoing": 547291 }
+
+
+Retrieve monthly transfer limits, in bytes:
+
+    GET /api/bandwidth/limits
+    Parameters: None
+
+    Normal result:
+    { "incoming": 1048576, "outgoing": 2097152 }
+
+
+Retrieve storage usage, in bytes:
+
+    GET /api/storage/usage
+    Parameters: None
+
+    Normal result:
+    { "usage": 5909746 }
+
+
+Retrieve storage capacity, in bytes:
+
+    GET /api/storage/capacity
+    Parameters: None
+
+    Normal result:
+    { "capacity": 67108864 }
+
+
+Retrieve datacoin balance, in DTC:
+
+    GET /api/dtc/balance
+    Parameters: None
+
+    Normal result:
+    { "balance": 1.05 }
+
+
+Retrieve datacoin address:
+
+    GET /api/dtc/address
+    Parameters: None
+
+    Normal result:
+    { "address": "DPhb7Pe1Ur6nWzLYBC1SeV8xAGCrYGMLVn" }
+
+
+Retrieve synchronization status:
+
+    GET /api/sync/status
+    Parameters: None
+
+    Normal result:
+    {
+      "blockchain_queue": [
+        {
+          "datetime": "1395271678",
+          "filehash": "ed641794a34b43bbaf90a95b7f308e0fea4a91d36ae5837dfe94ca47b36245fb",
+          "filename": "ed64179_dbz_4.jpg",
+          "filesize": 109780,
+          "uploads": [
+            {
+              "host_name": "euroshare_eu",
+              "url": "http://euroshare.eu/file/15828782/ed64179-dbz-4.jpg"
+            },
+            {
+              "host_name": "rghost",
+              "url": "http://rghost.net/53193939"
+            },
+            {
+              "error": true,
+              "host_name": "zalil_ru"
+            }
+          ]
+        }
+      ],
+      "cloud_queue": [
+        {
+          "filehash": "069c2733ac4a608ef6acc70386378e0974ba0e045c3a0e684a9ed3b0fe2c68ae",
+          "filename": "069c273_78bandnames.jpg",
+          "filesize": 500228
+        }
+      ]
+    }
