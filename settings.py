@@ -15,6 +15,11 @@ DATACOIN_START    = 220000
 # cloud synchronization daemon settings
 CLOUDSYNC_WAIT    = 30 # in seconds
 
+# Transfer limit settings
+
+TRANSFER_MAX_INCOMING = 0 # in bytes
+TRANSFER_MAX_OUTGOING = 0 # in bytes
+
 try:
     from local_settings import *
 except ImportError:

@@ -140,7 +140,9 @@ def bandwidth_limits():
 
     cm = get_cloud_manager()
 
-    return jsonify(incoming=cm.incoming_limit(), outgoing=cm.outgoing_limit())
+    return jsonify(
+        incoming=settings.TRANSFER_MAX_INCOMING,
+        outgoing=settings.TRANSFER_MAX_OUTGOING)
 
 
 @app.route("/api/storage/usage", methods=['GET'])
