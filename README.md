@@ -39,12 +39,14 @@ application. It uses `cloudmanager` to manage all uploads/downloads, and
 between nodes running BitCumulus.
 
 
-#### Installation
+## Installation
 
 Check [INSTALL.md](INSTALL.md) for installation instructions.
 
 
-## Synchronization note ##
+## Synchronization note
 
 Keep in mind that the `upload` command spends datacoins, so be careful when
 using it.
+
+## API documentation
