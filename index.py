@@ -166,6 +166,15 @@ def storage_capacity():
 
     return jsonify(capacity=cm.capacity())
 
+
+@app.route("/api/storage/size-limit", methods=['GET'])
+def storage_filesize_limit():
+    """Return cloud manager max file size.
+
+    """
+    return jsonify(size=settings.STORAGE_FILE)
+
+
 @app.route("/api/sync/status", methods=['GET'])
 def status_sync():
     """Return cloud manager synchronization status.
