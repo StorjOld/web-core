@@ -11,7 +11,7 @@
 
 import os
 
-from flask import Flask, render_template, request, g, jsonify, send_file
+from flask import Flask, render_template, request, g, jsonify, send_file, make_response
 from werkzeug import secure_filename
 
 import settings
