@@ -24,7 +24,7 @@ app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
 
 def make_cloudmanager():
     return cloudmanager.CloudManager(
-        settings.DATABASE,
+        settings.DATABASE_PATH,
         settings.STORAGE_PATH,
         settings.STORAGE_SIZE)
 
