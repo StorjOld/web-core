@@ -76,9 +76,15 @@ def upload():
         result = get_cloud_manager().upload(temp_name)
 
         if not result:
-            return jsonify(error='Upload Failed'), 500
+            response = make_response(jsonify(error='Upload failed'), 500)
         else:
-            return jsonify(filehash=result), 201
+            response = make_response(jsonify(filehash=result), 201)
+
+        response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+
+        return response
+
     finally:
         os.remove(temp_name)
 
