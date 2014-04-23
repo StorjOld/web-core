@@ -136,8 +136,8 @@ def status():
                 "outgoing": cm.total_outgoing()
                 },
             "current": {
-                "incoming": cm.total_incoming(),
-                "outgoing": cm.total_outgoing()
+                "incoming": cm.current_incoming(),
+                "outgoing": cm.current_outgoing()
                 },
             "limits": {
                 "incoming": settings.TRANSFER_MAX_INCOMING,
