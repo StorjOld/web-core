@@ -122,6 +122,46 @@ def find(filehash):
     return jsonify(info)
 
 
+@app.route("/api/status", methods=['GET'])
+def status():
+    """Return node status information."""
+
+    cm   = get_cloud_manager()
+    coin = get_coin()
+
+    return jsonify({
+        "bandwidth": {
+            "total": {
+                "incoming": cm.total_incoming(),
+                "outgoing": cm.total_outgoing()
+                },
+            "current": {
+                "incoming": cm.total_incoming(),
+                "outgoing": cm.total_outgoing()
+                },
+            "limits": {
+                "incoming": settings.TRANSFER_MAX_INCOMING,
+                "outgoing": settings.TRANSFER_MAX_OUTGOING
+                }
+            },
+
+        "storage": {
+            "capacity": cm.capacity(),
+            "used": cm.used_space(),
+            "max_file_size": settings.STORAGE_FILE
+            },
+
+        "sync": {
+            "cloud_queue_size": cm.upload_candidates(),
+            "blockchain_queue_size": cm.blockchain_queue_size()
+            },
+
+        "datacoin": {
+            "balance": coin.balance(),
+            "address": coin.address("incoming")
+            }
+        })
+
 @app.route("/api/bandwidth/usage", methods=['GET'])
 def bandwidth_usage():
     """Return bandwidth usage statistics."""
