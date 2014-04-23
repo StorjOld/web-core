@@ -152,8 +152,8 @@ def status():
             },
 
         "sync": {
-            "cloud_queue_size": cm.upload_queue_size(),
-            "blockchain_queue_size": cm.blockchain_queue_size()
+            "cloud_queue": cm.upload_queue_info(),
+            "blockchain_queue": cm.blockchain_queue_info()
             },
 
         "datacoin": {
