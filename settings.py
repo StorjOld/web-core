@@ -12,7 +12,6 @@ STORAGE_FILE          = 5*(2**20)   # 5 MiB
 DATACOIN_URL          = "http://127.0.0.1:11777"
 DATACOIN_USERNAME     = "datacoinrpc"
 DATACOIN_PASSWORD     = "secretish-password"
-DATACOIN_START        = 220000
 
 # cloud synchronization daemon settings
 CLOUDSYNC_WAIT        = 30 # in seconds

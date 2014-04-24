@@ -24,8 +24,7 @@ def make_coin():
 def make_sync(coin, cloud):
     return metachains_dtc.Synchronizer(
         coin,
-        cloud,
-        settings.DATACOIN_START)
+        cloud)
 
 
 if __name__ == "__main__":

@@ -37,7 +37,6 @@ can be configured correctly by setting a few parameters in `local_settings.py`:
     DATACOIN_URL            # URL to the server RPC endpoint.
     DATACOIN_USERNAME       # RPC username.
     DATACOIN_PASSWORD       # RPC password.
-    DATACOIN_START          # Block index where to start scanning.
 
     STORAGE_PATH            # Path to the local cache storage.
     STORAGE_SIZE            # Maximum capacity of the local storage (bytes).
