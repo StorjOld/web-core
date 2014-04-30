@@ -109,11 +109,16 @@ def download(filehash):
     if full_path is None:
         return jsonify(error='File not found'), 404
 
-    return Response(
-        stream_with_context(
-            file_encryptor.convergence.decrypt_generator(full_path, key)),
-        mimetype="application/octet-stream",
-        headers={"Content-Disposition":"attachment;filename=" + os.path.basename(full_path) })
+    if key is None:
+        return send_file(full_path,
+            attachment_filename=os.path.basename(full_path),
+            as_attachment=True)
+    else:
+        return Response(
+            stream_with_context(
+                file_encryptor.convergence.decrypt_generator(full_path, key)),
+            mimetype="application/octet-stream",
+            headers={"Content-Disposition":"attachment;filename=" + os.path.basename(full_path) })
 
 
 @app.route("/api/find/<filehash>", methods=['GET'])
