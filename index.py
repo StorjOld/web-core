@@ -111,7 +111,9 @@ def download(filehash):
 
     return Response(
         stream_with_context(
-            file_encryptor.convergence.decrypt_generator(full_path, key)))
+            file_encryptor.convergence.decrypt_generator(full_path, key)),
+        mimetype="application/octet-stream",
+        headers={"Content-Disposition":"attachment;filename=" + os.path.basename(full_path) })
 
 
 @app.route("/api/find/<filehash>", methods=['GET'])
