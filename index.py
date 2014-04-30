@@ -11,12 +11,13 @@
 
 import os
 
-from flask import Flask, render_template, request, g, jsonify, send_file, make_response
+from flask import Flask, render_template, request, g, jsonify, send_file, make_response, Response, stream_with_context
 from werkzeug import secure_filename
 
 import settings
 import cloudmanager
 import metachains_dtc
+import file_encryptor.convergence
 
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
@@ -73,13 +74,13 @@ def upload():
     file.save(temp_name)
 
     try:
-        file_encryptor.convergence.encrypt_file_inline(temp_name, None)
+        key = file_encryptor.convergence.encrypt_file_inline(temp_name, None)
         result = get_cloud_manager().upload(temp_name)
 
         if not result:
             response = make_response(jsonify(error='Upload failed'), 500)
         else:
-            response = make_response(jsonify(filehash=result), 201)
+            response = make_response(jsonify(filehash=result, key=key), 201)
 
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
