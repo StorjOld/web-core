@@ -73,6 +73,7 @@ def upload():
     file.save(temp_name)
 
     try:
+        file_encryptor.convergence.encrypt_file_inline(temp_name, None)
         result = get_cloud_manager().upload(temp_name)
 
         if not result:
@@ -101,13 +102,15 @@ def download(filehash):
     """
     cm = get_cloud_manager()
 
+    key = request.args.get('key', None)
+
     full_path = cm.warm_up(filehash)
     if full_path is None:
         return jsonify(error='File not found'), 404
 
-    return send_file(full_path,
-            attachment_filename=os.path.basename(full_path),
-            as_attachment=True)
+    return Response(
+        stream_with_context(
+            file_encryptor.convergence.decrypt_generator(full_path, key)))
 
 
 @app.route("/api/find/<filehash>", methods=['GET'])

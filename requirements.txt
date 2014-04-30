@@ -10,3 +10,4 @@ wsgiref==0.1.2
 requests==2.2.1
 -e git+https://github.com/Storj/metachains-dtc.git#egg=metachains_dtc-0.1.4
 simplejson==3.4.0
+-e git+https://github.com/Storj/file-encryptor.git#egg=file_encryptor-0.1.0
