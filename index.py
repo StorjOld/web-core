@@ -18,6 +18,7 @@ import settings
 import cloudmanager
 import metachains_dtc
 import file_encryptor.convergence
+import token_manager
 
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
@@ -37,7 +38,7 @@ class WebCore(object):
             settings.STORAGE_PATH,
             settings.STORAGE_SIZE)
 
-        self.tokens = cloudmanager.TokenManager(
+        self.tokens = token_manager.TokenManager(
             settings.DATABASE_PATH)
 
         self.coin = metachains_dtc.Datacoin(
