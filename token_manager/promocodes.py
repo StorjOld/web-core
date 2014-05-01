@@ -9,9 +9,9 @@ class PromocodeDatabase(object):
             """SELECT * FROM promocodes WHERE promocode = %s;""",
             [promocode])
 
-        promocode = cursor.fetchone()
+        code = cursor.fetchone()
 
-        if promocode is None:
+        if code is None:
             return None
 
         cursor.execute(
@@ -29,6 +29,6 @@ class PromocodeDatabase(object):
         self.db.commit()
 
         if success:
-            return promocode['amount']
+            return code['amount']
         else:
             return None
