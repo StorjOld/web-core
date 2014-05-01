@@ -3,19 +3,32 @@ class PromocodeDatabase(object):
         self.db = db
 
     def redeem(self, token, promocode):
-        """SELECT * FROM promocodes;"""
-        return None # if doesn't exist
+        cursor = self.db.cursor()
 
-        # Do this atomically
-        """
-            SELECT 1 FROM promocode_uses
-            WHERE token = %s AND promocode = %s;
-        """
+        cursor.execute(
+            """SELECT * FROM promocodes WHERE promocode = %s;""",
+            [promocode])
 
-        """
-            INSERT INTO promocode_uses (token, promocode)
-            VALUES (%s, %s);
-        """
+        promocode = cursor.fetchone()
 
-        return None # if can't redeem
-        return 5    # if success
+        if promocode is None:
+            return None
+
+        cursor.execute(
+            """
+                INSERT INTO promocode_uses (token, promocode)
+                SELECT %s, %s
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM promocode_uses
+                    WHERE token = %s AND promocode = %s);
+            """,
+            [token, promocode, token, promocode])
+
+        success = (cursor.rowcount == 1)
+
+        self.db.commit()
+
+        if success:
+            return promocode['amount']
+        else:
+            return None
