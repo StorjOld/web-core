@@ -11,7 +11,19 @@ class PriceDatabase(object):
 
     def prices(self):
         """SELECT * FROM prices;"""
-        return [
-            Price(5, 100 * units.GIGABYTE),
-            Price(50,  1 * units.TERABYTE)
-        ]
+
+        cursor = self.db.cursor()
+        cursor.execute("""SELECT * FROM prices;""")
+
+        rows = []
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+
+            rows.append(self.convert(row))
+
+        return rows
+
+    def convert(self, row):
+        return Price(row['bytes'], row['amount'])
