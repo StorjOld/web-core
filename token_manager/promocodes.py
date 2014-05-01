@@ -29,6 +29,6 @@ class PromocodeDatabase(object):
         self.db.commit()
 
         if success:
-            return code['amount']
+            return code['bytes']
         else:
             return None

@@ -28,9 +28,5 @@ CREATE TABLE prices (
   amount BIGINT
 );
 
-INSERT INTO prices (bytes, amount) VALUES
-  ( 100::BIGINT * 1024 * 1024 * 1024,  500),
-  (1000::BIGINT * 1024 * 1024 * 1024, 5000);
 
-INSERT INTO promocodes (promocode, amount) VALUES
-  ('STORJ2014', 500);
+ALTER TABLE promocodes RENAME COLUMN amount TO bytes;
