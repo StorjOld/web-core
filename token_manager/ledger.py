@@ -49,7 +49,7 @@ class Ledger(object):
         if success:
             cursor.execute(
                 """INSERT INTO movements (token, amount) VALUES(%s, %s)""",
-                [token, amount])
+                [token, -amount])
 
         self.db.commit()
         return success
