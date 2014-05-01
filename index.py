@@ -212,7 +212,7 @@ def token_balance(token):
 def token_redeem(token):
     tm = get_webcore().tokens
 
-    promocode = request.args.get('promocode', None)
+    promocode = None if request.json is None else request.json.get('promocode', None)
 
     if promocode and tm.redeem(token, promocode):
         return jsonify(status="ok"), 201
