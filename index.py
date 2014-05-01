@@ -201,14 +201,14 @@ def token_prices():
         for price in tm.prices()])
 
 
-@app.route("/api/token/balance/:token", methods=['GET'])
+@app.route("/api/token/balance/<token>", methods=['GET'])
 def token_balance(token):
     tm = get_webcore().tokens
 
     return jsonify(balance=tm.balance(token))
 
 
-@app.route("/api/token/redeem/:token", methods=['POST'])
+@app.route("/api/token/redeem/<token>", methods=['POST'])
 def token_redeem(token):
     tm = get_webcore().tokens
 
