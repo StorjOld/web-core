@@ -23,6 +23,13 @@ app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
 app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
 
+if not app.debug:
+    import logging
+    file_handler = logging.FileHandler('production.log')
+    file_handler.setLevel(logging.WARNING)
+    app.logger.addHandler(file_handler)
+
+
 def make_cloudmanager():
     return cloudmanager.CloudManager(
         settings.DATABASE_PATH,
