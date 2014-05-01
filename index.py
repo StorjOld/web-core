@@ -37,10 +37,14 @@ class WebCore(object):
             settings.STORAGE_PATH,
             settings.STORAGE_SIZE)
 
+        self.tokens = cloudmanager.TokenManager(
+            settings.DATABASE_PATH)
+
         self.coin = metachains_dtc.Datacoin(
             settings.DATACOIN_URL,
             settings.DATACOIN_USERNAME,
             settings.DATACOIN_PASSWORD)
+
 
 def get_webcore():
     wc = getattr(g, '_web_core', None)
@@ -49,9 +53,6 @@ def get_webcore():
         wc = g._web_core = WebCore()
 
     return wc
-
-
-
 
 
 @app.teardown_appcontext
@@ -178,6 +179,47 @@ def status():
             }
         })
 
+## Token management
+
+@app.route("/api/token/new", methods=['POST'])
+def token_new():
+    tm = get_webcore().tokens
+
+    return jsonify(token=tm.generate())
+
+
+@app.route("/api/token/prices", methods=['GET'])
+def token_prices():
+    tm = get_webcore().tokens
+
+    return jsonify(prices=[
+        {
+            "amount": price.amount,
+            "cost": price.cost
+        }
+        for price in tm.prices()])
+
+
+@app.route("/api/token/balance/:token", methods=['GET'])
+def token_balance(token):
+    tm = get_webcore().tokens
+
+    return jsonify(balance=tm.balance(token))
+
+
+@app.route("/api/token/redeem/:token", methods=['POST'])
+def token_redeem(token):
+    tm = get_webcore().tokens
+
+    promocode = request.args.get('promocode', None)
+
+    if promocode and tm.redeem(token, promocode):
+        return jsonify(status="ok"), 201
+    else:
+        return jsonify(status="error"), 403
+
+
+## Main
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
