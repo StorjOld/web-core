@@ -98,98 +98,47 @@ Retrieve information regarding a given file hash:
       "version": "0.2"
     }
 
+Retrieve node information, including storage, transfer limits, synchronization
+status, datacoin information. All sizes are in bytes.
 
-Retrieve incoming transfer byte count, for the current month and for all time:
-
-    GET /api/bandwidth/usage
+    GET /api/status
     Parameters: None
 
     Normal result:
-    {
-      "current": { "incoming": 192746, "outgoing": 547291 },
-      "total":   { "incoming": 792431, "outgoing": 953218 }
-    }
-
-
-Retrieve monthly transfer limits, in bytes:
-
-    GET /api/bandwidth/limits
-    Parameters: None
-
-    Normal result:
-    { "incoming": 1048576, "outgoing": 2097152 }
-
-
-Retrieve storage usage, in bytes:
-
-    GET /api/storage/usage
-    Parameters: None
-
-    Normal result:
-    { "usage": 5909746 }
-
-
-Retrieve storage capacity, in bytes:
-
-    GET /api/storage/capacity
-    Parameters: None
-
-    Normal result:
-    { "capacity": 67108864 }
-
-
-Retrieve datacoin balance, in DTC:
-
-    GET /api/dtc/balance
-    Parameters: None
-
-    Normal result:
-    { "balance": 1.05 }
-
-
-Retrieve datacoin address:
-
-    GET /api/dtc/address
-    Parameters: None
-
-    Normal result:
-    { "address": "DPhb7Pe1Ur6nWzLYBC1SeV8xAGCrYGMLVn" }
-
-
-Retrieve synchronization status:
-
-    GET /api/sync/status
-    Parameters: None
-
-    Normal result:
-    {
-      "blockchain_queue": [
         {
-          "datetime": "1395271678",
-          "filehash": "ed641794a34b43bbaf90a95b7f308e0fea4a91d36ae5837dfe94ca47b36245fb",
-          "filename": "ed64179_dbz_4.jpg",
-          "filesize": 109780,
-          "uploads": [
-            {
-              "host_name": "euroshare_eu",
-              "url": "http://euroshare.eu/file/15828782/ed64179-dbz-4.jpg"
-            },
-            {
-              "host_name": "rghost",
-              "url": "http://rghost.net/53193939"
-            },
-            {
-              "error": true,
-              "host_name": "zalil_ru"
-            }
-          ]
+            "bandwidth": {
+                "total": {
+                    "incoming": 792431,
+                    "outgoing": 953218
+                    },
+                "current": {
+                    "incoming": 192746,
+                    "outgoing": 547291
+                    },
+                "limits": {
+                    "incoming": 1048576,
+                    "outgoing": 2097152
+                    }
+                },
+
+            "storage": {
+                "capacity":      67108864,
+                "used":          5909746,
+                "max_file_size": 1048576
+                },
+
+            "sync": {
+                "blockchain_queue": {
+                    "count": 73,
+                    "size":  912834
+                },
+                "cloud_queue": {
+                    "count": 12,
+                    "size":  6572
+                },
+
+            "datacoin": {
+                "balance": 1.05,
+                "address": "DPhb7Pe1Ur6nWzLYBC1SeV8xAGCrYGMLVn"
+                }
         }
-      ],
-      "cloud_queue": [
-        {
-          "filehash": "069c2733ac4a608ef6acc70386378e0974ba0e045c3a0e684a9ed3b0fe2c68ae",
-          "filename": "069c273_78bandnames.jpg",
-          "filesize": 500228
-        }
-      ]
-    }
