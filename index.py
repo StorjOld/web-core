@@ -30,39 +30,33 @@ if not app.debug:
     app.logger.addHandler(file_handler)
 
 
-def make_cloudmanager():
-    return cloudmanager.CloudManager(
-        settings.DATABASE_PATH,
-        settings.STORAGE_PATH,
-        settings.STORAGE_SIZE)
+class WebCore(object):
+    def __init__(self):
+        self.cloud = cloudmanager.CloudManager(
+            settings.DATABASE_PATH,
+            settings.STORAGE_PATH,
+            settings.STORAGE_SIZE)
 
-def make_coin():
-    return metachains_dtc.Datacoin(
-        settings.DATACOIN_URL,
-        settings.DATACOIN_USERNAME,
-        settings.DATACOIN_PASSWORD)
+        self.coin = metachains_dtc.Datacoin(
+            settings.DATACOIN_URL,
+            settings.DATACOIN_USERNAME,
+            settings.DATACOIN_PASSWORD)
+
+def get_webcore():
+    wc = getattr(g, '_web_core', None)
+
+    if wc is None:
+        wc = g._web_core = WebCore()
+
+    return wc
 
 
-def get_cloud_manager():
-    """Instantiate a cloudmanager instance, if needed."""
 
-    cloud_manager = getattr(g, '_cloud_manager', None)
-    if cloud_manager is None:
-        cloud_manager = g._cloud_manager = make_cloudmanager()
-
-    return cloud_manager
-
-def get_coin():
-    coin = getattr(g, '_coin', None)
-    if coin is None:
-        coin = g._coin = make_coin()
-
-    return coin
 
 
 @app.teardown_appcontext
 def close_connection(exception):
-    get_cloud_manager().close()
+    get_webcore().cloud.close()
 
 
 #Upload post method to save files into directory
@@ -82,7 +76,7 @@ def upload():
 
     try:
         key = file_encryptor.convergence.encrypt_file_inline(temp_name, None)
-        result = get_cloud_manager().upload(temp_name)
+        result = get_webcore().cloud.upload(temp_name)
 
         if not result:
             response = make_response(jsonify(error='Upload failed'), 500)
@@ -108,7 +102,7 @@ def download(filehash):
     with an error message.
 
     """
-    cm = get_cloud_manager()
+    cm = get_webcore().cloud
 
     key = request.args.get('key', None)
 
@@ -130,7 +124,7 @@ def download(filehash):
 
 @app.route("/api/find/<filehash>", methods=['GET'])
 def find(filehash):
-    cm = get_cloud_manager()
+    cm = get_webcore().cloud
 
     info = cm.info(filehash)
 
@@ -142,10 +136,14 @@ def find(filehash):
 
 @app.route("/api/status", methods=['GET'])
 def status():
-    """Return node status information."""
+    """Return node status information.
 
-    cm   = get_cloud_manager()
-    coin = get_coin()
+    This includes transfer limits, storage usage,
+    synchronization status and datacoin status.
+
+    """
+    cm   = get_webcore().cloud
+    coin = get_webcore().coin
 
     return jsonify({
         "bandwidth": {
