@@ -77,25 +77,25 @@ Retrieve information regarding a given file hash:
 
     Normal Result:
     {
-      "datetime": "1395268813",
-      "filehash": "cda2bb0f57d172b4901ee71f64f067335023c30e9eea2b7bc9d02ced942b3a29",
-      "filename": "cda2bb0_zenziC_-_Biomechanical.mp3",
-      "filesize": 3546893,
-      "uploads": [
-        {
-          "host_name": "multiupload",
-          "url": "http://multiupload.nl/K69M8BRFYR"
-        },
-        {
-          "host_name": "euroshare_eu",
-          "url": "http://euroshare.eu/file/15828724/cda2bb0-zenzic-biomechanical.mp3"
-        },
-        {
-          "error": true,
-          "host_name": "zalil_ru"
-        }
-      ],
-      "version": "0.2"
+        "datetime": "1398875062",
+        "filehash": "b17fee6427ee665eb54159762fe03847792af1d94bf6769b82f95b95e82975d2",
+        "filename": "b17fee6_WhatisStorj.pdf",
+        "filesize": 337748,
+        "uploads": [
+            {
+                "host_name": "ge_tt",
+                "url": "http://ge.tt/162T7Ef1/v/0"
+            },
+            {
+                "host_name": "gfile_ru",
+                "url": "http://gfile.ru/a4WfC"
+            },
+            {
+                "host_name": "rghost",
+                "url": "http://rghost.net/54761561"
+            }
+        ],
+        "version": "0.2"
     }
 
 Retrieve node information, including storage, transfer limits, synchronization
