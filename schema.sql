@@ -29,8 +29,8 @@ CREATE TABLE prices (
 );
 
 INSERT INTO prices (bytes, amount) VALUES
-  ( 100 * 1024 * 1024 * 1024,  500),
-  (1000 * 1024 * 1024 * 1024, 5000);
+  ( 100::BIGINT * 1024 * 1024 * 1024,  500),
+  (1000::BIGINT * 1024 * 1024 * 1024, 5000);
 
 INSERT INTO promocodes (promocode, amount) VALUES
   ('STORJ2014', 500);
