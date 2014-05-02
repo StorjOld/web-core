@@ -33,16 +33,33 @@ This project depends on several other projects:
   the Datacoin client, using json RPC. It also contains a synchronization class,
   which allows one to synchronize data from and to the blockchain.
 
+- [file-encryptor](https://github.com/Storj/file-encryptor) is an encryption
+  package that implements convergent encryption using HMAC-SHA256 and AES128-CTR.
+
 This project puts everything together and makes it accessible through a web
 application. It uses `cloudmanager` to manage all uploads/downloads, and
 `metachains-dtc` to enable synchronization of the hosted content information
-between nodes running BitCumulus.
+between nodes running BitCumulus. All uploaded files are encrypted using
+`file-encryptor`.
 
 
 #### Synchronization note
 
 Keep in mind that the `upload` command spends datacoins, so be careful when
 using it.
+
+#### Transfer cost
+
+Each time you upload or download a file, credit is removed from your account.
+The credited values vary wether you are uploading or downloading a file, and
+if the file is already present on the server or not.
+
+Uploading a file of B bytes will cost you ``4 * B``` bytes of credit. One
+time for the upload transfer and three times for the cloud hosting transfer.
+
+Downloading a file of B bytes will cost you ```2 * B``` bytes of credit if the
+file is not on the server's local cache. If it is, this value will be reduced
+to ```B``` bytes of credit.
 
 
 ## Installation
