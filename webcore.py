@@ -1,3 +1,5 @@
+import os
+
 import settings
 import cloudmanager
 import metachains_dtc
@@ -37,7 +39,7 @@ class WebCore(object):
         if info is None:
             return None
 
-        bytecount = info['size']
+        bytecount = info['filesize']
         if not self.cloud.on_cache(filehash):
             bytecount *= 2
 
