@@ -1,3 +1,4 @@
+import settings
 import cloudmanager
 import metachains_dtc
 import token_manager
