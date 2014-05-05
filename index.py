@@ -223,7 +223,7 @@ def token_redeem(token):
 def token_deposit(token):
     api_key = request.headers.get('Authentication', None)
 
-    if !get_webcore().api_key.valid_api_key(api_key):
+    if not get_webcore().api_key.valid_api_key(api_key):
         return jsonify(status="invalid-authentication"), 401
 
     tm = get_webcore().tokens

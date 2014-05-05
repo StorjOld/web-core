@@ -1,4 +1,4 @@
-import database
+import token_manager.database
 
 class Authentication(object):
     def __init__(self, database_path):
