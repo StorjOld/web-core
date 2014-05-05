@@ -224,7 +224,7 @@ Deposits the given amount of bytes to the given access token:
     - bytes
 
     Headers:
-    - Authorization: <SECRET_KEY>
+    - Authentication: <SECRET_KEY>
 
     Error results:
     { "status": "invalid-authentication" }
