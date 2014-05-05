@@ -53,7 +53,7 @@ def upload():
 
     """
     # Save the uploaded file into a temporary location.
-    token       = request.form['token']
+    token       = request.form.get('token', None)
     file        = request.files['file']
     filename    = secure_filename(file.filename)
     temp_name   = os.path.join(app.config['TEMP_FOLDER'], filename)
