@@ -54,7 +54,7 @@ Each time you upload or download a file, credit is removed from your account.
 The credited values vary wether you are uploading or downloading a file, and
 if the file is already present on the server or not.
 
-Uploading a file of B bytes will cost you ``4 * B``` bytes of credit. One
+Uploading a file of B bytes will cost you ```4 * B``` bytes of credit. One
 time for the upload transfer and three times for the cloud hosting transfer.
 
 Downloading a file of B bytes will cost you ```2 * B``` bytes of credit if the
