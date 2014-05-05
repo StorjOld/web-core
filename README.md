@@ -92,7 +92,7 @@ Retrieve information regarding a given file hash:
     Error results:
     { "error": "File not found" }
 
-    Normal Result:
+    Normal result:
     {
         "datetime": "1398875062",
         "filehash": "b17fee6427ee665eb54159762fe03847792af1d94bf6769b82f95b95e82975d2",
@@ -114,6 +114,7 @@ Retrieve information regarding a given file hash:
         ],
         "version": "0.2"
     }
+
 
 Retrieve node information, including storage, transfer limits, synchronization
 status, datacoin information. All sizes are in bytes.
@@ -159,3 +160,75 @@ status, datacoin information. All sizes are in bytes.
                 "address": "DPhb7Pe1Ur6nWzLYBC1SeV8xAGCrYGMLVn"
                 }
         }
+
+
+## Token API Documentation
+
+### Public API (doesn't require authentication)
+
+Generate a new access token:
+
+    POST /api/token/new
+    Parameters: None
+
+    Normal result:
+    {
+        "token": "adF7WFCpQR2EvFkG"
+    }
+
+
+Retrieve node bandwidth prices:
+
+    GET /api/token/prices
+    Parameters: None
+
+    Normal result:
+    {
+        "prices": [
+            { "amount": 107374182400,  "cost": 500  },
+            { "amount": 1073741824000, "cost": 5000 }
+        ]
+    }
+
+
+Retrieve the transfer byte balance for a given access token:
+
+    GET /api/token/balance/<access_token>
+    Parameters: None
+
+    Normal result:
+    {
+        "balance": 1675029880
+    }
+
+
+Redeem a promocode for the given access token:
+
+    POST /api/token/redeem/<access_token>
+    Parameters:
+    - promocode
+
+    Error results:
+    { "status": "error" }
+
+    Normal result:
+    { "status": "ok" }
+
+
+### Private API (requires authentication)
+
+Deposits the given amount of bytes to the given access token:
+
+    POST /api/token/deposit/<access_token>
+    Parameters:
+    - bytes
+
+    Headers:
+    - Authorization: <SECRET_KEY>
+
+    Error results:
+    { "status": "invalid-authentication" }
+    { "status": "bad-request" }
+
+    Normal result:
+    { "status": "ok" }

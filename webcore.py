@@ -4,6 +4,7 @@ import settings
 import cloudmanager
 import metachains_dtc
 import token_manager
+import authentication
 
 class Receipt(object):
     def __init__(self, token, bytecount):
@@ -24,6 +25,9 @@ class WebCore(object):
             settings.DATACOIN_URL,
             settings.DATACOIN_USERNAME,
             settings.DATACOIN_PASSWORD)
+
+        self.api_key = authentication.Authentication(
+            settings.DATABASE_PATH)
 
     def charge_upload(self, token, file_path):
         bytecount = os.path.getsize(file_path)
@@ -50,5 +54,3 @@ class WebCore(object):
 
     def refund(self, receipt):
         self.tokens.deposit(receipt.token, receipt.bytecount)
-
-

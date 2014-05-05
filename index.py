@@ -219,6 +219,25 @@ def token_redeem(token):
         return jsonify(status="error"), 403
 
 
+@app.route("/api/token/deposit/<token>", methods=['POST'])
+def token_deposit(token):
+    api_key = request.headers.get('Authentication', None)
+
+    if !get_webcore().api_key.valid_api_key(api_key):
+        return jsonify(status="invalid-authentication"), 401
+
+    tm = get_webcore().tokens
+
+    try:
+        byte_amount = int(request.json.get('bytes', None))
+    except:
+        return jsonify(status="bad-request"), 400
+
+    tm.add(token, byte_amount)
+
+    return jsonify(status="ok")
+
+
 ## Main
 
 if __name__ == "__main__":

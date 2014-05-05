@@ -30,3 +30,9 @@ CREATE TABLE prices (
 
 
 ALTER TABLE promocodes RENAME COLUMN amount TO bytes;
+
+
+CREATE TABLE api_keys (
+  id  SERIAL,
+  key VARCHAR
+);
