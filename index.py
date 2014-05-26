@@ -240,5 +240,15 @@ def token_deposit(token):
 
 ## Main
 
+@app.route("/coinbasecallback",methods=['POST'])
+def coinbasecallback():
+    postdata = request.get_json(force=True)
+    ## Get the token from the callback
+    token = postdata["custom"]
+    tm = get_webcore().tokens
+    ## Assign 100GB to the token
+    tm.add(token, 107374182400)
+    return jsonify(status="ok")
+
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
