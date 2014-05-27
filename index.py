@@ -238,7 +238,7 @@ def token_deposit(token):
     return jsonify(status="ok")
 
 
-@app.route("/api/coinbasecallback", methods=['POST'])
+@app.route("/api/coinbasecallback/",methods=['POST', 'GET'])
 def coinbasecallback():
     postdata = request.get_json(force=True)
     ## Debugging info
