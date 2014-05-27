@@ -238,13 +238,11 @@ def token_deposit(token):
     return jsonify(status="ok")
 
 
-## Main
-
-@app.route("/coinbasecallback",methods=['POST'])
+@app.route("/api/coinbasecallback", methods=['POST'])
 def coinbasecallback():
     postdata = request.get_json(force=True)
     ## Debugging info
-    with open("coinbase_test.txt","wb") as fo:
+    with open("coinbase_test.txt", "wb") as fo:
         fo.write(json.dumps(request.json))
     ## Get the token from the callback
     token = postdata["custom"]
@@ -252,6 +250,8 @@ def coinbasecallback():
     ## Assign 100GB to the token
     tm.add(token, 107374182400)
     return jsonify(status="ok")
+
+## Main
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
