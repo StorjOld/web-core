@@ -5,7 +5,7 @@ web-core, a filehost web app, that allows anyone to upload files via a API.
 Files are hashed and uploaded to public file hosting. Using the hashes a node
 can look up the information of where that file was stored using the
 [Datacoin](http://datacoin.info/) blockchain. This makes a file uploaded to
-BitCumulus accessible through any node in the network.
+Metadisk accessible through any node in the network.
 
 - Coded in [Python](http://python.org/) and [Flask](http://flask.pocoo.org/), a Python microframework for web.
 - Must be run on a Linux based web server, [Debian](http://www.debian.org/) distro recommended.
@@ -13,7 +13,7 @@ BitCumulus accessible through any node in the network.
 #### Web interface
 
 If you wish to use this in a browser, take a look at
-[BitCumulus](https://github.com/Storj/BitCumulus). It is a web interface,
+[Metadisk](https://github.com/Storj/Metadisk). It is a web interface,
 composed of only html, css and javascript, powered by the web-core API.
 
 
@@ -39,7 +39,7 @@ This project depends on several other projects:
 This project puts everything together and makes it accessible through a web
 application. It uses `cloudmanager` to manage all uploads/downloads, and
 `metachains-dtc` to enable synchronization of the hosted content information
-between nodes running BitCumulus. All uploaded files are encrypted using
+between nodes running Metadisk. All uploaded files are encrypted using
 `file-encryptor`.
 
 
