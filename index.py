@@ -245,7 +245,8 @@ def coinbase_success(api_key, bytes):
 
     # Return a bad request if custom param is missing
     try:
-        token = request.json.get('custom', None)
+        data = request.json.get('order', None)
+        token = data['custom']
     except:
         return jsonify(status="bad-request"), 400
     
