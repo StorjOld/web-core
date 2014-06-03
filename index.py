@@ -238,8 +238,8 @@ def token_deposit(token):
     return jsonify(status="ok")
 
 
-@app.route("/api/coinbase/success/<apikey>/<int:bytes>", methods=['POST'])
-def coinbase_success(apikey, bytes):
+@app.route("/api/coinbase/success/<api_key>/<int:bytes>", methods=['POST'])
+def coinbase_success(api_key, bytes):
     if not get_webcore().api_key.valid_api_key(api_key):
         return jsonify(status="invalid-authentication"), 401
 
