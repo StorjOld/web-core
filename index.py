@@ -254,7 +254,7 @@ def coinbase_success(api_key, bytes):
     
     tm.add(token, bytes)
 
-    return jsonify(status="ok"), 201
+    return jsonify(status="ok"), 200
 
 
 ## Main
