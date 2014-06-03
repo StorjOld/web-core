@@ -243,7 +243,11 @@ def coinbase_success(api_key, bytes):
     if not get_webcore().api_key.valid_api_key(api_key):
         return jsonify(status="invalid-authentication"), 401
 
-    token = request.json.get('custom', None)
+    # Return a bad request if custom param is missing
+    try:
+        token = request.json.get('custom', None)
+    except:
+        return jsonify(status="bad-request"), 400
     
     tm = get_webcore().tokens
     
