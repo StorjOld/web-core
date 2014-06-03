@@ -238,18 +238,19 @@ def token_deposit(token):
     return jsonify(status="ok")
 
 
-@app.route("/coinbasecallback", methods=['POST'])
-def coinbasecallback():
-    postdata = request.get_json(force=True)
-    ## Debugging info
-    with open("coinbase_test.txt", "wb") as fo:
-        fo.write(json.dumps(request.json))
-    ## Get the token from the callback
-    token = postdata["custom"]
+@app.route("/api/coinbase/success/<apikey>/<int:bytes>", methods=['POST'])
+def coinbase_success(apikey, bytes):
+    if not get_webcore().api_key.valid_api_key(api_key):
+        return jsonify(status="invalid-authentication"), 401
+
+    token = request.json.get('custom', None)
+    
     tm = get_webcore().tokens
-    ## Assign 100GB to the token
-    tm.add(token, 107374182400)
-    return jsonify(status="ok")
+    
+    tm.add(token, bytes)
+
+    return jsonify(status="ok"), 201
+
 
 ## Main
 
