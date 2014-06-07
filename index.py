@@ -175,7 +175,8 @@ def status():
 
         "datacoin": {
             "balance": coin.balance(),
-            "address": coin.address("incoming")
+            "address": coin.address("incoming"),
+            "block":   cm.last_known_block()
             }
         })
 
