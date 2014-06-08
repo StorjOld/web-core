@@ -1,3 +1,0 @@
-MEGABYTE = 2 ** 20
-GIGABYTE = 2 ** 30
-TERABYTE = 2 ** 40

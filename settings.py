@@ -21,6 +21,12 @@ CLOUDSYNC_WAIT        = 30 # in seconds
 TRANSFER_MAX_INCOMING = 0 # in bytes
 TRANSFER_MAX_OUTGOING = 0 # in bytes
 
+# Accounts API
+
+ACCOUNTS_API_ENABLED  = False
+ACCOUNTS_API_BASE_URL = "http://node.storj.io/accounts"
+ACCOUNTS_API_KEY      = "secret-key"
+
 try:
     from local_settings import *
 except ImportError:
