@@ -232,3 +232,22 @@ Deposits the given amount of bytes to the given access token:
 
     Normal result:
     { "status": "ok" }
+
+
+Withdraws the given amount of bytes from the given access token:
+
+    POST /accounts/token/withdraw/<access_token>
+    Parameters:
+    - bytes
+
+    Headers:
+    - Authentication: <SECRET_KEY>
+
+    Error results:
+    { "status": "invalid-authentication" }
+    { "status" : "bad-request" }
+    { "status" : "balance-insufficient"}
+
+    Normal result:
+    { "status": "ok" }
+
