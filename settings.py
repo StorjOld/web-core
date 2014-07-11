@@ -2,7 +2,7 @@
 # Cloud manager settings
 PROJECT_ROOT          = '.'
 
-DATABASE_PATH         = PROJECT_ROOT + '/database/files.db'
+DATABASE_PATH         = 'postgres://storj:so-secret@localhost/storj'
 STORAGE_PATH          = PROJECT_ROOT + '/uploads'
 STORAGE_SIZE          = 20*(2**20)  # 20 MiB
 STORAGE_FILE          = 5*(2**20)   # 5 MiB
