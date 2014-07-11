@@ -17,7 +17,7 @@ If you're running Debian, you can install it using the following commands:
 This project has a pip compatible requirements.txt. You can use virtualenv to
 manage dependencies:
 
-    cd BitCumulus
+    cd Metadisk
     virtualenv .env                  # create a virtual environment for this project
     source .env/bin/activate         # activate it
     pip install -r requirements.txt  # install dependencies
@@ -58,9 +58,9 @@ To test the installation, use the following command:
 
     python index.py
 
-BitCumulus will be running on http://localhost:5000. You can use `gunicorn` to
+Metadisk will be running on http://localhost:5000. You can use `gunicorn` to
 run multiple workers. Check the
-[BitCumulus](https://github.com/Storj/BitCumulus) project if you wish to use
+[Metadisk](https://github.com/Storj/Metadisk) project if you wish to use
 this with a web browser interface.
 
 

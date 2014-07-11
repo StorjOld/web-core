@@ -168,7 +168,7 @@ status, datacoin information. All sizes are in bytes.
 
 Generate a new access token:
 
-    POST /api/token/new
+    POST /accounts/token/new
     Parameters: None
 
     Normal result:
@@ -179,7 +179,7 @@ Generate a new access token:
 
 Retrieve node bandwidth prices:
 
-    GET /api/token/prices
+    GET /accounts/token/prices
     Parameters: None
 
     Normal result:
@@ -193,7 +193,7 @@ Retrieve node bandwidth prices:
 
 Retrieve the transfer byte balance for a given access token:
 
-    GET /api/token/balance/<access_token>
+    GET /accounts/token/balance/<access_token>
     Parameters: None
 
     Normal result:
@@ -204,7 +204,7 @@ Retrieve the transfer byte balance for a given access token:
 
 Redeem a promocode for the given access token:
 
-    POST /api/token/redeem/<access_token>
+    POST /accounts/token/redeem/<access_token>
     Parameters:
     - promocode
 
@@ -219,7 +219,7 @@ Redeem a promocode for the given access token:
 
 Deposits the given amount of bytes to the given access token:
 
-    POST /api/token/deposit/<access_token>
+    POST /accounts/token/deposit/<access_token>
     Parameters:
     - bytes
 
@@ -232,3 +232,22 @@ Deposits the given amount of bytes to the given access token:
 
     Normal result:
     { "status": "ok" }
+
+
+Withdraws the given amount of bytes from the given access token:
+
+    POST /accounts/token/withdraw/<access_token>
+    Parameters:
+    - bytes
+
+    Headers:
+    - Authentication: <SECRET_KEY>
+
+    Error results:
+    { "status": "invalid-authentication" }
+    { "status" : "bad-request" }
+    { "status" : "balance-insufficient"}
+
+    Normal result:
+    { "status": "ok" }
+
