@@ -25,7 +25,7 @@ This project depends on several other projects:
   python interface to upload and download files from popular file hosting
   sites. It is a python wrapper of the plowshare tool.
 
-- [cloudmanager](https://github.com/Storj/cloud-manager) contains most of the
+- [cloud-manager](https://github.com/Storj/cloud-manager) contains most of the
   file handling logic. It keeps track of all the uploaded files, keeps track of
   the files present in local cache, and handles database serialization.
 
