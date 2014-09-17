@@ -21,6 +21,7 @@ import file_encryptor.convergence
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
 app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
+app.config['DATACOIN_OVERRIDE'] = settings.DATACOIN_OVERRIDE
 
 if not app.debug:
     import logging
@@ -35,6 +36,8 @@ def get_webcore():
     if wc is None:
         wc = g._web_core = webcore.WebCore()
 
+    if settings.DATACOIN_OVERRIDE:
+        wc.coin = settings.DATACOIN_OVERRIDE()
     return wc
 
 
