@@ -4,8 +4,13 @@ matrix:
   include:
       - python: "2.7"
 #     - python: "3.3"
+env:
+    - DB_URL=postgresql://postgres@localhost/
+install: 
+    - pip install tox
 script: 
     - tox
     - cat production.log
 addons:
+  postgresql: "9.3"
   postgresql: "9.3"
