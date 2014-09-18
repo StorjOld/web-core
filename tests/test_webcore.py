@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import index as web_core
 import file_encryptor
+from webcore import WebCore
 
 import settings
 
@@ -17,6 +18,7 @@ import unittest
 import tempfile
 import hashlib
 import stat
+import multiprocessing
 
 import sqlite3
 import flask
@@ -48,6 +50,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
     def setUp(self):
         self.SAMPLE_UPLOAD_SIZE_BYTES = 256
         self.storage_path = tempfile.mkdtemp()
+        settings.CLOUDSYNC_WAIT = 1.
         settings.DATABASE_PATH = os.environ.get('DB_URL', 'postgres://postgres:postgres@localhost/')
         settings.STORAGE_PATH  = self.storage_path
         try:
@@ -75,7 +78,6 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         self.db = self._init_db(settings.DATABASE_PATH, db_name)
 
         self.app = web_core.app.test_client()
-
 
     def _init_db(self, database_path, db_name):
         '''Initialize the database to a known state.
@@ -127,32 +129,28 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
 
         return fields['filehash'], fields['key']
 
-#   def _new_token(self):
-#       response = self.app.post('/accounts/token/new')
-#       assert status.is_success(response.status_code)
-
-#       fields = json.loads(response.data)
-#       return fields['token']
-    
     def test_find(self):
         '''Test GET /api/find/[hash]
         '''
         contents = os.urandom(self.SAMPLE_UPLOAD_SIZE_BYTES)
-        contents = bytes(['u'] * self.SAMPLE_UPLOAD_SIZE_BYTES)
-        filehash = self._upload(contents)
+        filehash, key = self._upload(contents)
+
+        WebCore().cloud.cloud_sync()
+
         response = self._find(filehash)
         assert status.is_success(response.status_code)
 
         lookup = json.loads(response.data)
 
         assert 'error' not in lookup
-        assert lookup['filesize'] == SAMPLE_UPLOAD_SIZE_BYTES
+        assert lookup['filesize'] == self.SAMPLE_UPLOAD_SIZE_BYTES
         assert lookup['filehash'] == filehash
 
 
         # Hash not found case:
         response = self._find('bogushash')
-        assert status.not_found(response.status_code)
+        assert status.is_client_error(response.status_code)
+        lookup = json.loads(response.data)
 
         assert 'error' in lookup
         assert 'filesize' not in lookup
@@ -184,7 +182,6 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         os.chmod(settings.STORAGE_PATH, ~stat.S_IRWXU)
         try:
             contents = os.urandom(self.SAMPLE_UPLOAD_SIZE_BYTES)
-            contents = bytes(['u'] * self.SAMPLE_UPLOAD_SIZE_BYTES)
 
             with self.assertRaises(self.FailedResponseException) as upl_exc:
                 filehash = self._upload(contents)

@@ -3,8 +3,9 @@ language: python
 matrix:
   include:
       - python: "2.7"
-      - python: "3.3"
-#     - python: "pypy" # doesn't work with pycrypto
-script: DB_URL="postgres://postgres@localhost/" tox
+#     - python: "3.3"
+script: 
+    - tox
+    - cat production.log
 addons:
   postgresql: "9.3"
