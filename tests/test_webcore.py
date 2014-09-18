@@ -3,6 +3,8 @@
 from __future__ import print_function
 
 import index as web_core
+import file_encryptor
+
 import settings
 
 from io import BytesIO
@@ -46,7 +48,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
     def setUp(self):
         self.SAMPLE_UPLOAD_SIZE_BYTES = 256
         self.storage_path = tempfile.mkdtemp()
-        settings.DATABASE_PATH = 'postgres://postgres:postgres@localhost/'
+        settings.DATABASE_PATH = os.environ.get('DB_URL', 'postgres://postgres:postgres@localhost/')
         settings.STORAGE_PATH  = self.storage_path
         try:
             os.makedirs('./tmp/') # TODO override app.config['TEMP_STORAGE'] with self.storage_path?
@@ -100,13 +102,19 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
 
         return response
 
-    def _download(self, filehash):
+    def _download(self, filehash, key):
         response = self.app.get('/api/download/{}'.format(filehash))
 
         if response.status_code != 200:
             raise self.FailedResponseException('Failed download', response)
 
-        return response.data
+        with tempfile.NamedTemporaryFile(delete=False) as f:
+            f.write(response.data)
+            f.close()
+
+            file_encryptor.convergence.decrypt_file_inline(f.name, key)
+            return open(f.name).read()
+
 
     def _upload(self, contents):
         response = self.app.post('/api/upload', data={
@@ -117,7 +125,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
             raise self.FailedResponseException('Failed upload', response)
         fields = json.loads(response.data)
 
-        return fields['filehash']
+        return fields['filehash'], fields['key']
 
 #   def _new_token(self):
 #       response = self.app.post('/accounts/token/new')
@@ -130,6 +138,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         '''Test GET /api/find/[hash]
         '''
         contents = os.urandom(self.SAMPLE_UPLOAD_SIZE_BYTES)
+        contents = bytes(['u'] * self.SAMPLE_UPLOAD_SIZE_BYTES)
         filehash = self._upload(contents)
         response = self._find(filehash)
         assert status.is_success(response.status_code)
@@ -152,7 +161,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         '''Test POST /api/upload
         '''
         contents = 'i' * self.SAMPLE_UPLOAD_SIZE_BYTES
-        filehash = self._upload(contents)
+        filehash, key = self._upload(contents)
 
         filename = '{}_{}'.format(filehash[:7], self.__class__.__name__)
         file_path = os.path.join(self.storage_path, filename)
@@ -164,8 +173,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         assert (stat.S_IXGRP & file_stat.st_mode) == 0
         assert (stat.S_IXOTH & file_stat.st_mode) == 0
 
-        # FIXME: we probably need to specify the key here
-        new_contents = self._download(filehash)
+        new_contents = self._download(filehash, key)
 
         assert contents == new_contents
 
@@ -176,6 +184,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         os.chmod(settings.STORAGE_PATH, ~stat.S_IRWXU)
         try:
             contents = os.urandom(self.SAMPLE_UPLOAD_SIZE_BYTES)
+            contents = bytes(['u'] * self.SAMPLE_UPLOAD_SIZE_BYTES)
 
             with self.assertRaises(self.FailedResponseException) as upl_exc:
                 filehash = self._upload(contents)
@@ -188,7 +197,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         '''Test GET /api/download with an invalid hash
         '''
         with self.assertRaises(self.FailedResponseException) as down_exc:
-            self._download('bogushash')
+            self._download('bogushash', 'boguskey')
 
         assert status.is_client_error(down_exc.exception.response.status_code)
 

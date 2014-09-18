@@ -5,6 +5,6 @@ matrix:
       - python: "2.7"
       - python: "3.3"
 #     - python: "pypy" # doesn't work with pycrypto
-script: python -m unittest discover --verbose tests/
+script: DB_URL="postgres://postgres@localhost/" tox
 addons:
   postgresql: "9.3"
