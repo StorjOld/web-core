@@ -10,7 +10,6 @@ install:
     - pip install tox
 script: 
     - tox
-    - cat production.log
 addons:
   postgresql: "9.3"
   postgresql: "9.3"
