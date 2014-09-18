@@ -1,0 +1,10 @@
+
+language: python
+matrix:
+  include:
+      - python: "2.7"
+      - python: "3.3"
+#     - python: "pypy" # doesn't work with pycrypto
+script: python -m unittest discover --verbose tests/
+addons:
+  postgresql: "9.3"
