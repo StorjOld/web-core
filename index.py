@@ -75,7 +75,7 @@ def upload():
                 # get_webcore().refund(receipt)
                 response = make_response(jsonify(error='upload-error'), 500)
             else:
-                response = make_response(jsonify(filehash=result, key=key), 201)
+                response = make_response(jsonify(filehash=result, key=key.encode('hex')), 201)
 
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
@@ -119,9 +119,10 @@ def download(filehash):
             attachment_filename=os.path.basename(full_path),
             as_attachment=True)
     else:
+        decoded = key.decode('hex')
         return Response(
             stream_with_context(
-                file_encryptor.convergence.decrypt_generator(full_path, key)),
+                file_encryptor.convergence.decrypt_generator(full_path, decoded)),
             mimetype="application/octet-stream",
             headers={"Content-Disposition":"attachment;filename=" + os.path.basename(full_path) })
 

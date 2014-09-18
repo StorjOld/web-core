@@ -114,7 +114,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
             f.write(response.data)
             f.close()
 
-            file_encryptor.convergence.decrypt_file_inline(f.name, key)
+            file_encryptor.convergence.decrypt_file_inline(f.name, key.decode('hex'))
             return open(f.name).read()
 
 
