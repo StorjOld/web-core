@@ -1,0 +1,12 @@
+Flask
+Flask-API
+Jinja2
+MarkupSafe
+Werkzeug
+argparse
+itsdangerous
+requests
+simplejson
+gunicorn
+yoyo-migrations
+-r base.txt

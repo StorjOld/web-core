@@ -10,13 +10,14 @@
 #   GET  /disk-usage
 
 import os
+import codecs
 
 from flask import Flask, render_template, request, g, jsonify, send_file, make_response, Response, stream_with_context
 from werkzeug import secure_filename
 
 import settings
 import webcore
-import file_encryptor.convergence
+import file_encryptor
 
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
@@ -75,7 +76,7 @@ def upload():
                 # get_webcore().refund(receipt)
                 response = make_response(jsonify(error='upload-error'), 500)
             else:
-                response = make_response(jsonify(filehash=result, key=key.encode('hex')), 201)
+                response = make_response(jsonify(filehash=result, key=codecs.encode(key, 'hex_codec')), 201)
 
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
         response.headers['Access-Control-Allow-Credentials'] = 'true'

@@ -8,6 +8,7 @@ from webcore import WebCore
 
 import settings
 
+import codecs
 from io import BytesIO
 import os
 import time
@@ -23,7 +24,8 @@ import multiprocessing
 import sqlite3
 import flask
 try:
-    from flask.ext.api import status
+    import flask.ext.api
+    status = flask.ext.api.status
 except ImportError as e:
     print('webcore tests require "Flask-API"')
 import json
@@ -114,8 +116,14 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
             f.write(response.data)
             f.close()
 
-            file_encryptor.convergence.decrypt_file_inline(f.name, key.decode('hex'))
-            return open(f.name).read()
+            file_encryptor.convergence.decrypt_file_inline(f.name, codecs.decode(key, 'hex_codec'))
+
+        with open(f.name) as f_:
+            contents = f_.read()
+
+        os.unlink(f.name)
+
+        return contents
 
 
     def _upload(self, contents):
@@ -125,7 +133,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
 
         if  response.status_code != status.HTTP_201_CREATED:
             raise self.FailedResponseException('Failed upload', response)
-        fields = json.loads(response.data)
+        fields = flask.json.loads(response.data)
 
         return fields['filehash'], fields['key']
 
@@ -140,7 +148,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         response = self._find(filehash)
         assert status.is_success(response.status_code)
 
-        lookup = json.loads(response.data)
+        lookup = flask.json.loads(response.data)
 
         assert 'error' not in lookup
         assert lookup['filesize'] == self.SAMPLE_UPLOAD_SIZE_BYTES
@@ -150,7 +158,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         # Hash not found case:
         response = self._find('bogushash')
         assert status.is_client_error(response.status_code)
-        lookup = json.loads(response.data)
+        lookup = flask.json.loads(response.data)
 
         assert 'error' in lookup
         assert 'filesize' not in lookup
@@ -158,7 +166,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
     def test_upload(self):
         '''Test POST /api/upload
         '''
-        contents = 'i' * self.SAMPLE_UPLOAD_SIZE_BYTES
+        contents = b'i' * self.SAMPLE_UPLOAD_SIZE_BYTES
         filehash, key = self._upload(contents)
 
         filename = '{}_{}'.format(filehash[:7], self.__class__.__name__)
@@ -203,13 +211,12 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         '''
         response = self.app.get('/api/status')
 
-        assert response.status_code == 200
+        assert status.is_success(response.status_code)
 
-        status = json.loads(response.data)
-        assert 'bandwidth' in status 
-        assert 'storage' in status 
-        assert 'sync' in status 
-        assert status 
+        status_ = flask.json.loads(response.data)
+        assert 'bandwidth' in status_
+        assert 'storage' in status_ 
+        assert 'sync' in status_ 
 
     @unittest.skip('this causes flask/werkzeug to fill memory, is this a real DoS?')
     def test_malicious_upload(self):
