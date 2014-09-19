@@ -1,0 +1,4 @@
+-e git+https://github.com/Storj/cloud-manager.git#egg=cloudmanager-0.7.0
+-e git+https://github.com/Storj/plowshare-wrapper.git#egg=plowshare-0.3.0
+-e git+https://github.com/Storj/metachains-dtc.git#egg=metachains_dtc-0.1.4
+-e git+https://github.com/Storj/file-encryptor.git#egg=file_encryptor-0.1.0
