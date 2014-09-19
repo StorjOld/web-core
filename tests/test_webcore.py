@@ -116,9 +116,10 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
             f.write(response.data)
             f.close()
 
-            file_encryptor.convergence.decrypt_file_inline(f.name, codecs.decode(key, 'hex_codec'))
+            key_ = codecs.decode(key, 'hex_codec')
+            file_encryptor.convergence.decrypt_file_inline(f.name, key_)
 
-        with open(f.name) as f_:
+        with open(f.name, 'rb') as f_:
             contents = f_.read()
 
         os.unlink(f.name)

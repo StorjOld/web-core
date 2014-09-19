@@ -120,7 +120,7 @@ def download(filehash):
             attachment_filename=os.path.basename(full_path),
             as_attachment=True)
     else:
-        decoded = key.decode('hex')
+        decoded = codecs.decode(key, 'hex_codec')
         return Response(
             stream_with_context(
                 file_encryptor.convergence.decrypt_generator(full_path, decoded)),
