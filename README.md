@@ -9,6 +9,7 @@ Metadisk accessible through any node in the network.
 
 - Coded in [Python](http://python.org/) and [Flask](http://flask.pocoo.org/), a Python microframework for web.
 - Must be run on a Linux based web server, [Debian](http://www.debian.org/) distro recommended.
+[![Build Status](https://travis-ci.org/Storj/web-core.svg?branch=master)](https://travis-ci.org/Storj/web-core)
 
 #### Web interface
 
