@@ -46,6 +46,9 @@ class MockAccountsServer(object):
     PORT = 32924 # TODO: can we be bound to an ephemeral port instead?
     Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
     class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+        def log_message(self, format, *args):
+            pass
+
         def do_POST(s):
             success = 'realtoken' in s.path
             s.send_response(200 if success else 404)
