@@ -9,6 +9,7 @@ STORAGE_FILE          = 5*(2**20)   # 5 MiB
 
 # Datacoin settings
 
+DATACOIN_OVERRIDE     = None # override with callable to bypass Datacoin
 DATACOIN_URL          = "http://127.0.0.1:11777"
 DATACOIN_USERNAME     = "datacoinrpc"
 DATACOIN_PASSWORD     = "secretish-password"

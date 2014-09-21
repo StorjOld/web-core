@@ -10,17 +10,19 @@
 #   GET  /disk-usage
 
 import os
+import codecs
 
 from flask import Flask, render_template, request, g, jsonify, send_file, make_response, Response, stream_with_context
 from werkzeug import secure_filename
 
 import settings
 import webcore
-import file_encryptor.convergence
+import file_encryptor
 
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
 app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
+app.config['DATACOIN_OVERRIDE'] = settings.DATACOIN_OVERRIDE
 
 if not app.debug:
     import logging
@@ -35,6 +37,8 @@ def get_webcore():
     if wc is None:
         wc = g._web_core = webcore.WebCore()
 
+    if settings.DATACOIN_OVERRIDE:
+        wc.coin = settings.DATACOIN_OVERRIDE()
     return wc
 
 
@@ -72,7 +76,7 @@ def upload():
                 # get_webcore().refund(receipt)
                 response = make_response(jsonify(error='upload-error'), 500)
             else:
-                response = make_response(jsonify(filehash=result, key=key), 201)
+                response = make_response(jsonify(filehash=result, key=codecs.encode(key, 'hex_codec')), 201)
 
         response.headers['Access-Control-Allow-Origin'] = 'http://localhost:8000'
         response.headers['Access-Control-Allow-Credentials'] = 'true'
@@ -116,9 +120,10 @@ def download(filehash):
             attachment_filename=os.path.basename(full_path),
             as_attachment=True)
     else:
+        decoded = codecs.decode(key, 'hex_codec')
         return Response(
             stream_with_context(
-                file_encryptor.convergence.decrypt_generator(full_path, key)),
+                file_encryptor.convergence.decrypt_generator(full_path, decoded)),
             mimetype="application/octet-stream",
             headers={"Content-Disposition":"attachment;filename=" + os.path.basename(full_path) })
 
