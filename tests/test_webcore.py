@@ -354,7 +354,9 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         finally:
             settings.ACCOUNTS_API_ENABLED  = orig_accts_api_enabled
             settings.ACCOUNTS_API_BASE_URL = orig_accts_api_url
+            del accts_server
 
+    @unittest.skip('Feature not yet developed, difficult to implement')
     def test_refund(self):
         '''Exercise the refund path by injecting a fault into cloudmanager.warm_up()
         '''
@@ -369,16 +371,15 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
 
             WebCore().cloud.cloud_sync()
 
-#           from pudb import set_trace; set_trace()
             cm = get_webcore().cloud
-            from flask import g
-#           g._web_core.cloud = None
+            from flask import g #FIXME: this 'g' instance is independent of the one to be used by index.download()
+#           g._web_core.cloud.warm_up = warm_up_always_fails
             cm.warm_up = warm_up_always_fails
 
-#           with self.assertRaises(self.FailedResponseException) as download_exc:
-#               self._download(filehash, key)
+            with self.assertRaises(self.FailedResponseException) as download_exc:
+                self._download(filehash, key)
 
-#           assert status.is_server_error(download_exc.exception.response.status_code)
+            assert status.is_server_error(download_exc.exception.response.status_code)
 
     def tearDown(self):
         with self.db.cursor() as cursor:
