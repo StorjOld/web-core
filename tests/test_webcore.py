@@ -151,8 +151,9 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
 
         return response
 
-    def _download(self, filehash, key):
-        response = self.app.get('/api/download/{}'.format(filehash))
+    def _download(self, filehash, key, token = None):
+        params = {'token': token, } if token else {}
+        response = self.app.get('/api/download/{}'.format(filehash), query_string = params)
 
         if response.status_code != 200:
             raise self.FailedResponseException('Failed download', response)
@@ -172,10 +173,14 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         return contents
 
 
-    def _upload(self, contents):
-        response = self.app.post('/api/upload', data={
+    def _upload(self, contents, **kwargs):
+        upload_data = {
             'file': (BytesIO(contents), self.__class__.__name__),
-        }, follow_redirects=True)
+        }
+        upload_data.update(kwargs)
+
+        response = self.app.post('/api/upload', data=upload_data,
+            follow_redirects=True)
 
         if  response.status_code != status.HTTP_201_CREATED:
             raise self.FailedResponseException('Failed upload', response)
@@ -231,14 +236,30 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         assert (stat.S_IXGRP & file_stat.st_mode) == 0
         assert (stat.S_IXOTH & file_stat.st_mode) == 0
 
-        new_contents = self._download(filehash, key)
+        WebCore().cloud.cloud_sync()
+
         new_contents = self._download(filehash, key)
 
         assert contents == new_contents
 
+    def test_not_in_cache(self):
+        '''Cover the cache miss path
+        '''
+        contents = b'i' * self.SAMPLE_UPLOAD_SIZE_BYTES
+        filehash, key = self._upload(contents)
+        filename = self._get_filename(filehash)
 
-    def test_upload_nostorage(self):
-        '''Test file upload when the backend storage is unavailable.
+        # If the file is missing, it's considered a cache miss.
+        #   -- It appears more severe than just a cache miss, though.
+        os.unlink(filename)
+
+        WebCore().cloud.cloud_sync()
+
+        with self.assertRaises(self.FailedResponseException) as download_exc:
+            self._download(filehash, key)
+
+    def test_upload_failures(self):
+        '''Test file upload when the backend storage is unavailable and insufficient space.
         '''
         os.chmod(settings.STORAGE_PATH, ~stat.S_IRWXU)
         try:
@@ -250,6 +271,18 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
             assert status.is_server_error(upl_exc.exception.response.status_code)
         finally:
             os.chmod(settings.STORAGE_PATH, stat.S_IRWXU)
+
+
+        orig_storage_size = settings.STORAGE_SIZE
+        settings.STORAGE_SIZE     = 1
+        try:
+            contents = b'w' * self.SAMPLE_UPLOAD_SIZE_BYTES
+            with self.assertRaises(self.FailedResponseException) as upl_exc:
+                filehash = self._upload(contents)
+
+            assert status.is_server_error(upl_exc.exception.response.status_code)
+        finally:
+            settings.STORAGE_SIZE = orig_storage_size
 
     def test_download_w_key(self):
         contents = os.urandom(self.SAMPLE_UPLOAD_SIZE_BYTES)
@@ -297,6 +330,56 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         }, follow_redirects=True)
         assert status.is_client_error(response.status_code)
 
+    def test_insufficient_balance(self):
+        contents = b'Z' * self.SAMPLE_UPLOAD_SIZE_BYTES
+        filehash, key = self._upload(contents)
+
+        orig_accts_api_enabled = settings.ACCOUNTS_API_ENABLED
+        orig_accts_api_url     = settings.ACCOUNTS_API_BASE_URL
+        accts_server = MockAccountsServer()
+        settings.ACCOUNTS_API_ENABLED  = True
+        settings.ACCOUNTS_API_BASE_URL = accts_server.url
+        try:
+            other_contents = b'P' * self.SAMPLE_UPLOAD_SIZE_BYTES
+            with self.assertRaises(self.FailedResponseException) as upl_exc:
+                self._upload(other_contents, token='invalidtoken')
+
+            assert status.is_client_error(upl_exc.exception.response.status_code)
+
+            with self.assertRaises(self.FailedResponseException) as down_exc:
+                self._download(filehash, key, 'invalidtoken')
+
+            assert status.is_client_error(down_exc.exception.response.status_code)
+
+        finally:
+            settings.ACCOUNTS_API_ENABLED  = orig_accts_api_enabled
+            settings.ACCOUNTS_API_BASE_URL = orig_accts_api_url
+
+    def test_refund(self):
+        '''Exercise the refund path by injecting a fault into cloudmanager.warm_up()
+        '''
+        from index import get_webcore
+        def warm_up_always_fails(self, filehash):
+            return None
+
+        app = flask.Flask(web_core.__name__)
+        with app.test_request_context('/api/download'):
+            contents = b'q' * self.SAMPLE_UPLOAD_SIZE_BYTES
+            filehash, key = self._upload(contents)
+
+            WebCore().cloud.cloud_sync()
+
+#           from pudb import set_trace; set_trace()
+            cm = get_webcore().cloud
+            from flask import g
+#           g._web_core.cloud = None
+            cm.warm_up = warm_up_always_fails
+
+#           with self.assertRaises(self.FailedResponseException) as download_exc:
+#               self._download(filehash, key)
+
+#           assert status.is_server_error(download_exc.exception.response.status_code)
+
     def tearDown(self):
         with self.db.cursor() as cursor:
             with open('tests/test_db_teardown.sql') as f:
@@ -322,7 +405,11 @@ class TestAccounts(unittest.TestCase):
         hdrs = self.accts.headers()
 
         response = self.accts.consume('realtoken', 0.1)
+        assert response.token == 'realtoken'
+        assert response.amount == 0.1
         response = self.accts.deposit('realtoken', 0.1)
+        assert response.token == 'realtoken'
+        assert response.amount == 0.1
 
     def tearDown(self):
         del self.accts_server
