@@ -4,7 +4,6 @@ branches:
     - legacy
     - experimental
 env:
-    - DB_URL=postgresql://postgres@localhost/
     - TOXENV=py27
     - TOXENV=py34
 before_install: 
