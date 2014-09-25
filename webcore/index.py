@@ -15,8 +15,8 @@ import codecs
 from flask import Flask, render_template, request, g, jsonify, send_file, make_response, Response, stream_with_context
 from werkzeug import secure_filename
 
-import settings
-import webcore
+from . import settings
+from . import webcore_ as webcore
 import file_encryptor
 
 app = Flask(__name__)
@@ -186,6 +186,3 @@ def status():
         })
 
 ## Main
-
-if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0')
