@@ -16,7 +16,7 @@ from flask import Flask, render_template, request, g, jsonify, send_file, make_r
 from werkzeug import secure_filename
 
 from . import settings
-from . import webcore
+from . import webcore_ as webcore
 import file_encryptor
 
 app = Flask(__name__)

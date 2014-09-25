@@ -6,12 +6,7 @@ import file_encryptor
 import webcore
 from webcore import (index, settings)
 
-#print('webcore contents', webcore.__all__)
-#settings = webcore.settings
-WebCore  = webcore.webcore.WebCore
-
-#from webcore.webcore import WebCore
-#import webcore.settings as settings
+WebCore  = webcore.webcore_.WebCore
 
 import codecs
 from io import BytesIO

@@ -1,2 +1,4 @@
 
-__all__ = ['index', 'webcore', 'accounts', 'cloudsync', ]
+__all__ = ['index', 'webcore_', 'accounts', 'cloudsync', ]
+
+import index
