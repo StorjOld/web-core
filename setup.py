@@ -10,7 +10,7 @@ setup(
     version='0.2',
     author='Storj',
     author_email='storj@example.com',
-    modules=['webcore', ],
+    packages=['webcore', ],
     scripts=[],
     url='https://github.com/Storj/web-core',
     license='TBD',

@@ -56,7 +56,7 @@ Check the [settings.py](settings.py) for the default values.
 
 To test the installation, use the following command:
 
-    python -m webcore.index
+    python -m webcore
 
 Metadisk will be running on http://localhost:5000. You can use `gunicorn` to
 run multiple workers. Check the
