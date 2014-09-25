@@ -1,14 +1,16 @@
 
 language: python
-matrix:
-  include:
-      - python: "2.7"
-      - python: "3.3"
+branches:
+  except:
+    - legacy
+    - experimental
 env:
     - DB_URL=postgresql://postgres@localhost/
-install: 
+    - TOXENV=py27
+    - TOXENV=py34
+before_install: 
     - pip install tox
 script: 
-    - tox
+    - tox tests/test_webcore.py
 addons:
   postgresql: "9.3"

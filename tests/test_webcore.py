@@ -2,11 +2,16 @@
 
 from __future__ import print_function
 
-import index as web_core
 import file_encryptor
-from webcore import WebCore
+import webcore
+from webcore import (index, settings)
 
-import settings
+#print('webcore contents', webcore.__all__)
+#settings = webcore.settings
+WebCore  = webcore.webcore.WebCore
+
+#from webcore.webcore import WebCore
+#import webcore.settings as settings
 
 import codecs
 from io import BytesIO
@@ -122,7 +127,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         db_name = self.__class__.__name__
         self.db = self._init_db(settings.DATABASE_PATH, db_name)
 
-        self.app = web_core.app.test_client()
+        self.app = index.app.test_client()
 
 #       self.accts_server = MockAccountsServer()
 
@@ -364,7 +369,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         def warm_up_always_fails(self, filehash):
             return None
 
-        app = flask.Flask(web_core.__name__)
+        app = flask.Flask(index.__name__)
         with app.test_request_context('/api/download'):
             contents = b'q' * self.SAMPLE_UPLOAD_SIZE_BYTES
             filehash, key = self._upload(contents)
@@ -389,7 +394,7 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         self.db.close()
         shutil.rmtree(self.storage_path)
 
-import accounts
+from webcore import accounts
 
 class TestAccounts(unittest.TestCase):
     def setUp(self):

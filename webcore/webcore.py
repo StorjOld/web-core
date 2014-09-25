@@ -1,9 +1,10 @@
 import os
 
-import settings
-import cloudmanager
 import metachains_dtc
-import accounts
+import cloudmanager
+
+from . import settings
+from . import accounts
 
 class WebCore(object):
     def __init__(self):

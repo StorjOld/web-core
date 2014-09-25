@@ -10,7 +10,7 @@ setup(
     version='0.2',
     author='Storj',
     author_email='storj@example.com',
-    modules=['accounts', 'index', 'settings', 'cloudsync', ],
+    modules=['webcore', ],
     scripts=[],
     url='https://github.com/Storj/web-core',
     license='TBD',
@@ -22,6 +22,9 @@ setup(
     extras_require={
         'test': [
             'tox',
+            'pytest',
+            'pytest-cov',
+            'coveralls',
         ]
     }
 )
