@@ -1,6 +1,7 @@
 web-core
 ========
 [![Build Status](https://travis-ci.org/Storj/web-core.svg?branch=master)](https://travis-ci.org/Storj/web-core)
+[![Coverage Status](https://coveralls.io/repos/Storj/web-core/badge.png?branch=master)](https://coveralls.io/r/Storj/web-core?branch=master) 
 
 web-core, a filehost web app, that allows anyone to upload files via a API.
 Files are hashed and uploaded to public file hosting. Using the hashes a node
