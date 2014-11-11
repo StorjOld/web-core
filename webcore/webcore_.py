@@ -13,7 +13,7 @@ class WebCore(object):
             settings.STORAGE_PATH,
             settings.STORAGE_SIZE)
 
-        self.coin = metachains.Datacoin(
+        self.coin = metachains.Florincoin(
             settings.METACHAINS_URL,
             settings.METACHAINS_USERNAME,
             settings.METACHAINS_PASSWORD)
