@@ -3,3 +3,4 @@ uploads
 .coverage
 *.pyc
 *.egg-info
+production.log
