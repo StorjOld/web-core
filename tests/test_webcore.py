@@ -107,16 +107,16 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
         settings.ACCOUNTS_API_ENABLED = False
         os.chmod(settings.STORAGE_PATH, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
 
-        def mockdc():
-            class MockDc(object):
+        def mockfc():
+            class MockFc(object):
                 def address(self, ident):
                     return '0'
 
                 def balance(self):
                     return 0.
 
-            return MockDc()
-        settings.DATACOIN_OVERRIDE = mockdc
+            return MockFc()
+        settings.FLORINCOIN_OVERRIDE = mockfc
 
 #       db_name = self.__class__.__name__ + str(int(time.time()))
         db_name = self.__class__.__name__

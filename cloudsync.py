@@ -7,7 +7,7 @@
 import time
 import settings
 import cloudmanager
-import metachains_dtc
+import metachains
 
 def make_cloudmanager():
     return cloudmanager.CloudManager(
@@ -16,13 +16,13 @@ def make_cloudmanager():
         settings.STORAGE_SIZE)
 
 def make_coin():
-    return metachains_dtc.Datacoin(
-        settings.DATACOIN_URL,
-        settings.DATACOIN_USERNAME,
-        settings.DATACOIN_PASSWORD)
+    return metachains.Florincoin(
+        settings.FLORINCOIN_URL,
+        settings.FLORINCOIN_USERNAME,
+        settings.FLORINCOIN_PASSWORD)
 
 def make_sync(coin, cloud):
-    return metachains_dtc.Synchronizer(
+    return metachains.Synchronizer(
         coin,
         cloud)
 
