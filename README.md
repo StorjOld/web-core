@@ -31,8 +31,8 @@ This project depends on several other projects:
   file handling logic. It keeps track of all the uploaded files, keeps track of
   the files present in local cache, and handles database serialization.
 
-- [metachains-dtc](https://github.com/Storj/metachains-dtc) is a wrapper for
-  the Datacoin client, using json RPC. It also contains a synchronization class,
+- [metachains](https://github.com/Storj/metachains) is a wrapper for
+  the Florincoin client, using json RPC. It also contains a synchronization class,
   which allows one to synchronize data from and to the blockchain.
 
 - [file-encryptor](https://github.com/Storj/file-encryptor) is an encryption
