@@ -1,6 +1,6 @@
 import os
 
-import metachains_dtc
+import metachains
 import cloudmanager
 
 from . import settings
