@@ -3,7 +3,7 @@ from distutils.core import setup
 try:
     longdescription = open('README.md').read()
 except EnvironmentError:
-    longdescription = 'web interface'
+    longdescription = 'Core manager of MetaDisk node services.'
 
 setup(
     name='web-core',
@@ -13,15 +13,14 @@ setup(
     packages=['webcore', ],
     scripts=[],
     url='https://github.com/Storj/web-core',
-    license='TBD',
-    description='TBD',
+    license='MIT',
+    description='Core manager of MetaDisk node services.',
     long_description=longdescription,
     install_requires=[
         'pycrypto >= 2.6.1',
     ],
     extras_require={
         'test': [
-            'tox',
             'pytest',
             'pytest-cov',
             'coveralls',
