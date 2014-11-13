@@ -9,6 +9,6 @@ install:
 addons:
     postgresql: "9.3"
 script:
-    py.test -v --cov-report=term-missing --cov=webcore -s {posargs}
+    py.test -v --cov-report=term-missing --cov=webcore
 after_success:
     coveralls
