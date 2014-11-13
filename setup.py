@@ -9,7 +9,7 @@ setup(
     name='web-core',
     version='0.2',
     author='Storj',
-    author_email='storj@example.com',
+    author_email='hello@storj.io',
     packages=['webcore', ],
     scripts=[],
     url='https://github.com/Storj/web-core',
