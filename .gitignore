@@ -1,2 +1,5 @@
 database/files.db
 uploads
+.coverage
+*.pyc
+*.egg-info
