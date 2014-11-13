@@ -13,10 +13,10 @@ class WebCore(object):
             settings.STORAGE_PATH,
             settings.STORAGE_SIZE)
 
-        self.coin = metachains_dtc.Datacoin(
-            settings.DATACOIN_URL,
-            settings.DATACOIN_USERNAME,
-            settings.DATACOIN_PASSWORD)
+        self.coin = metachains.Florincoin(
+            settings.FLORINCOIN_URL,
+            settings.FLORINCOIN_USERNAME,
+            settings.FLORINCOIN_PASSWORD)
 
         self.accounts = accounts.create(
             settings.ACCOUNTS_API_ENABLED,
