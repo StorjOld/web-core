@@ -9,4 +9,5 @@ requests
 simplejson
 gunicorn
 yoyo-migrations
+file_encryptor
 -r base.txt
