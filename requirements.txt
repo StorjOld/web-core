@@ -10,4 +10,5 @@ simplejson
 gunicorn
 yoyo-migrations
 file_encryptor
+plowshare
 -r base.txt
