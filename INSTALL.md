@@ -7,11 +7,11 @@ To use this, you must install the [plowshare command line
 tool](https://code.google.com/p/plowshare/). Make sure that both plowup and
 plowdown are in your PATH before continuing.
 
-If you're running Debian, you can install it using the following commands:
+If you're running Ubuntu, you can install it using the following commands:
 
-    wget https://plowshare.googlecode.com/files/plowshare4_1~git20140112.7ad41c8-1_all.deb
-    sudo dpkg -i plowshare4_1~git20140112.7ad41c8-1_all.deb
-    sudo apt-get -f install
+    $ sudo add-apt-repository ppa:plowsharepackagers/ppa
+    $ sudo apt-get update
+    $ sudo apt-get install plowshare4
 
 
 This project has a pip compatible requirements.txt. You can use virtualenv to
