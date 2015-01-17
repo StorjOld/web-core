@@ -1,14 +1,14 @@
 language: python
-branches:
-  except:
-    - legacy
-    - experimental
-env:
-    - TOXENV=py27
-    - TOXENV=py34
-before_install: 
-    - pip install tox
-script: 
-    - tox
+python:
+    - 2.7
+    - 3.3
+    - 3.4
+install:
+    - pip install -r requirements.txt
+    - pip install -e '.[test]'
 addons:
-  postgresql: "9.3"
+    postgresql: "9.3"
+script:
+    py.test -v --cov-report=term-missing --cov=webcore
+after_success:
+    coveralls

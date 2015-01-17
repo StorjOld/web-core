@@ -25,7 +25,7 @@ TRANSFER_MAX_OUTGOING = 0 # in bytes
 # Accounts API
 
 ACCOUNTS_API_ENABLED  = False
-ACCOUNTS_API_BASE_URL = "http://node.storj.io/accounts"
+ACCOUNTS_API_BASE_URL = "http://node2.metadisk.org/accounts"
 ACCOUNTS_API_KEY      = "secret-key"
 
 try:
