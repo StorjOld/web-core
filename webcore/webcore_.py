@@ -14,9 +14,9 @@ class WebCore(object):
             settings.STORAGE_SIZE)
 
         self.coin = metachains.Florincoin(
-            settings.FLORINCOIN_URL,
-            settings.FLORINCOIN_USERNAME,
-            settings.FLORINCOIN_PASSWORD)
+            settings.METACHAINS_URL,
+            settings.METACHAINS_USERNAME,
+            settings.METACHAINS_PASSWORD)
 
         self.accounts = accounts.create(
             settings.ACCOUNTS_API_ENABLED,
