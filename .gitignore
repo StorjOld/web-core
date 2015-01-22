@@ -2,5 +2,6 @@ database/files.db
 uploads
 .coverage
 *.pyc
+*.swp
 *.egg-info
 production.log
