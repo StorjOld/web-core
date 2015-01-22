@@ -116,7 +116,8 @@ class MetaDiskWebCoreTestCase(unittest.TestCase):
                     return 0.
 
             return MockFc()
-        settings.FLORINCOIN_OVERRIDE = mockfc
+
+        settings.METACHAINS_OVERRIDE = mockfc
 
 #       db_name = self.__class__.__name__ + str(int(time.time()))
         db_name = self.__class__.__name__

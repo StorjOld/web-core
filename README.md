@@ -6,7 +6,7 @@ web-core
 web-core, a filehost web app, that allows anyone to upload files via an API.
 Files are hashed and uploaded to public file hosting. Using the hashes a node
 can look up the information of where that file was stored using the
-[Datacoin](http://datacoin.info/) blockchain. This makes a file uploaded to
+[Florincoin](http://florincoin.info/) blockchain. This makes a file uploaded to
 MetaDisk accessible through any node in the network.
 
 - Coded in [Python](http://python.org/) and [Flask](http://flask.pocoo.org/), a Python microframework for web.
@@ -47,7 +47,7 @@ between nodes running MetaDisk. All uploaded files are encrypted using
 
 #### Synchronization note
 
-Keep in mind that the `upload` command spends datacoins, so be careful when
+Keep in mind that the `upload` command spends Florincoins, so be careful when
 using it.
 
 #### Transfer cost
@@ -119,7 +119,7 @@ Retrieve information regarding a given file hash:
 
 
 Retrieve node information, including storage, transfer limits, synchronization
-status, datacoin information. All sizes are in bytes.
+status, florincoin information. All sizes are in bytes.
 
     GET /api/status
     Parameters: None

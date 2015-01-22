@@ -7,12 +7,12 @@ STORAGE_PATH          = PROJECT_ROOT + '/uploads'
 STORAGE_SIZE          = 20*(2**20)  # 20 MiB
 STORAGE_FILE          = 5*(2**20)   # 5 MiB
 
-# Florincoin settings
+# Metachains settings
 
-FLORINCOIN_OVERRIDE     = None # override with callable to bypass Florincoin
-FLORINCOIN_URL          = "http://127.0.0.1:11777"
-FLORINCOIN_USERNAME     = "florincoinrpc"
-FLORINCOIN_PASSWORD     = "secretish-password"
+METACHAINS_OVERRIDE     = None # override with callable to bypass Metachains real coin
+METACHAINS_URL          = "http://127.0.0.1:11777"
+METACHAINS_USERNAME     = "datacoinrpc"
+METACHAINS_PASSWORD     = "secretish-password"
 
 # cloud synchronization daemon settings
 CLOUDSYNC_WAIT        = 30 # in seconds

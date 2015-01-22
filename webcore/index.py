@@ -22,7 +22,7 @@ import file_encryptor
 app = Flask(__name__)
 app.config['TEMP_FOLDER'] = 'tmp'
 app.config['MAX_CONTENT_LENGTH'] = settings.STORAGE_SIZE
-app.config['FLORINCOIN_OVERRIDE'] = settings.FLORINCOIN_OVERRIDE
+app.config['METACHAINS_OVERRIDE'] = settings.METACHAINS_OVERRIDE
 
 if not app.debug:
     import logging
@@ -37,8 +37,8 @@ def get_webcore():
     if wc is None:
         wc = g._web_core = webcore.WebCore()
 
-    if settings.FLORINCOIN_OVERRIDE:
-        wc.coin = settings.FLORINCOIN_OVERRIDE()
+    if settings.METACHAINS_OVERRIDE:
+        wc.coin = settings.METACHAINS_OVERRIDE()
     return wc
 
 
@@ -149,7 +149,7 @@ def status():
     """Return node status information.
 
     This includes transfer limits, storage usage,
-    synchronization status and florincoin status.
+    synchronization status and metachains status.
 
     """
     cm = get_webcore().cloud
@@ -182,8 +182,8 @@ def status():
             "blockchain_queue": cm.blockchain_queue_info()
         },
 
-        "florincoin": {
-            "balance": coin.balance(),
+        "metachains": {
+            "coin": 'florincoin',
             "address": coin.address("incoming"),
             "block":   cm.last_known_block()
         }

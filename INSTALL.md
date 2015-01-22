@@ -34,9 +34,9 @@ can be configured correctly by setting a few parameters in `local_settings.py`:
 
     DATABASE_PATH           # Database path.
 
-    FLORINCOIN_URL          # URL to the server RPC endpoint.
-    FLORINCOIN_USERNAME     # RPC username.
-    FLORINCOIN_PASSWORD     # RPC password.
+    METACHAINS_URL          # URL to the server RPC endpoint.
+    METACHAINS_USERNAME     # RPC username.
+    METACHAINS_PASSWORD     # RPC password.
 
     STORAGE_PATH            # Path to the local cache storage.
     STORAGE_SIZE            # Maximum capacity of the local storage (bytes).
